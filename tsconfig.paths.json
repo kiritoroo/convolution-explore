@@ -14,8 +14,6 @@
       "@store/*": ["src/stores/*"],
       "@type/*": ["src/types/*"],
       "@asset/*": ["src/assets/*"],
-      "@atom/*": ["src/store/atoms/*"],
-      "@selector/*": ["src/store/selectors/*"],
       "@util/*": ["src/utils/*"],
       "@addon/*": ["src/addons/*"],
       "@service/*": ["src/services/*"],

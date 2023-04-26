@@ -11,7 +11,9 @@ import {
 interface IDotWrapperProps {
   children: React.ReactNode
 }
-export const MotionDotWrapper: React.FC<IDotWrapperProps> = ({ children }) => {
+export const MotionDotWrapper: React.FC<IDotWrapperProps> = ( props ) => {
+  const { children } = props
+  
   const transition = useRef<Transition>({
     staggerChildren: 0.2
   });
@@ -23,7 +25,7 @@ export const MotionDotWrapper: React.FC<IDotWrapperProps> = ({ children }) => {
 
   return (
     <StyledDotWrapper 
-      variants={variants.current}
+      variants={ variants.current }
       initial="start"
       animate="end"
     >
@@ -46,8 +48,8 @@ export const MotionDot: React.FC<IDotProps> = () => {
 
   return (
     <StyledDot 
-      variants={variants.current} 
-      transition={transition.current}
+      variants={ variants.current } 
+      transition={ transition.current }
     />
   )
 }
