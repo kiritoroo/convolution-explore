@@ -1,7 +1,8 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { 
   Transition,
-  Variants 
+  Variants, 
+  useAnimate
 } from 'framer-motion';
 import {
   StyledButtonCollapseVez,
@@ -73,11 +74,13 @@ export const MotionIconCollapseVez: React.FC<IIconCollapseVezProps> = React.memo
 
 interface IButtonCollapseHozProps {
   children: React.ReactNode,
+  isCollapseVez: boolean,
   isCollapseHoz: boolean,
+  isShowButtonCollapseHoz: boolean,
   onClick: () => void
 }
 export const MotionButtonCollapseHoz: React.FC<IButtonCollapseHozProps> = React.memo(( props ) => {
-  const { children, isCollapseHoz, onClick } = props
+  const { children, isCollapseVez, isCollapseHoz, isShowButtonCollapseHoz, onClick } = props
 
   const variants = useRef<Variants>({
     collapse: { opacity: 0, scale: 1, left: -10, pointerEvents: 'none' },
@@ -92,8 +95,8 @@ export const MotionButtonCollapseHoz: React.FC<IButtonCollapseHozProps> = React.
     <StyledButtonCollapseHoz
       onClick={handleClick}
       variants={ variants.current }
-      initial={ isCollapseHoz ? 'collapse' : 'expand' }
-      animate={ isCollapseHoz ? 'collapse' : 'expand' }
+      initial={ !isCollapseVez && (!isCollapseHoz || isShowButtonCollapseHoz) ? 'expand' : 'collapse' }
+      animate={ !isCollapseVez && (!isCollapseHoz || isShowButtonCollapseHoz) ? 'expand' : 'collapse' }
     >
       { children }
     </StyledButtonCollapseHoz>
@@ -154,7 +157,7 @@ export const MotionCategoryWrapper: React.FC<ICategoryWrapperProps> = React.memo
   const { children, isCollapseVez, index } = props
 
   const transition = useRef<Transition>({
-    duration: 0.2, delay: index * 0.05
+    duration: 0.2, delay: index * 0.05, type: 'keyframes'
   });
 
   const variants = useRef<Variants>({
@@ -162,8 +165,19 @@ export const MotionCategoryWrapper: React.FC<ICategoryWrapperProps> = React.memo
     expand: { opacity: 1, scale: 1, height: 'auto' }
   });
 
+  const [scope, animate] = useAnimate()
+
+  useEffect(() => {
+    if (isCollapseVez) {
+      animate(scope.current, { width: 0 }, { duration: 0.3, delay: index * 0.05 })
+    } else {
+      animate(scope.current, { width: 'auto' }, { duration: 0.5, delay:  -0.2 })
+    }
+  }, [isCollapseVez])
+
   return (
     <StyledCategoryWrapper
+      ref={scope}
       variants={ variants.current }
       transition={ transition.current }
       style={{ originX: 0.5, originY: 0 }}

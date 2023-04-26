@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect } from "react";
-import * as S from '@style2d/KernelCategory.styled'
-import * as M from '@motion2d/KernelCategory.motion'
+import React, { useCallback, useEffect, useState } from "react";
 import {
   isCollapseVezKernelCategoryState,
   isCollapseHozKernelCategoryState
@@ -9,10 +7,14 @@ import {
   kernelCategoryDataSelector
 } from '@store/selectors'
 import { useRecoilState, useRecoilValue } from "recoil";
+import { KernelCategoryItem } from "@comp2d/KernelCategoryItem";
+import * as S from '@style2d/KernelCategory.styled';
+import * as M from '@motion2d/KernelCategory.motion';
 
-interface IProps { }
+interface IProps {}
 
 export const KernelCategory = React.memo((props: IProps) => {
+  const [isShowButtonCollapseHoz, setisShowButtonCollapseHoz] = useState<boolean>(false)
   const kernelCategoryData = useRecoilValue(kernelCategoryDataSelector);
   const [ isCollapseVez, setIsCollapseVez ] = useRecoilState(isCollapseVezKernelCategoryState);
   const [ isCollapseHoz, setIsCollapseHoz ] = useRecoilState(isCollapseHozKernelCategoryState);
@@ -35,25 +37,29 @@ export const KernelCategory = React.memo((props: IProps) => {
             isCollapseVez={isCollapseVez}/>
         </M.MotionButtonCollapseVez>
 
-        <S.StyledBoudingRectCollapseHoz>
+        <S.StyledBoudingRectCollapseHoz
+          onMouseMove={() => setisShowButtonCollapseHoz(true)}
+          onMouseLeave={() => setisShowButtonCollapseHoz(false)}>
           <M.MotionButtonCollapseHoz
+            isCollapseVez={isCollapseVez}
             isCollapseHoz={isCollapseHoz}
+            isShowButtonCollapseHoz={isShowButtonCollapseHoz}
             onClick={handleButtonCollapseHozClick}>
             <M.MotionIconCollapseHoz
               isCollapseHoz={isCollapseHoz}/>
           </M.MotionButtonCollapseHoz>
         </S.StyledBoudingRectCollapseHoz>
 
-        <M.MotionCategoryListWrapper>
+        {/* <M.MotionCategoryListWrapper> */}
           {kernelCategoryData.categoryList && kernelCategoryData.categoryList.map((item, index) => (
-            <M.MotionCategoryWrapper 
+            <M.MotionCategoryWrapper
              key={item.id}
              isCollapseVez={isCollapseVez}
              index={index}>
-              { item.label }
+              <KernelCategoryItem categoryData={item}/>
             </M.MotionCategoryWrapper>
           ))}
-        </M.MotionCategoryListWrapper>
+        {/* </M.MotionCategoryListWrapper> */}
       </S.StyledContainer>
     </React.Fragment>
   )

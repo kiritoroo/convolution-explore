@@ -28,12 +28,12 @@ export const kernelCategoryDataSelector = selector({
       return dataCount
     }) ?? []
 
-    // const dataCountById: Record<string, number> = {};
-    // categoryList?.forEach(category => {
-    //   const categoryId = category.id;
-    //   const dataCount = category.infoList.reduce((count, info) => count + info.dataList.length, 0);
-    //   dataCountById[categoryId] = dataCount;
-    // }) ?? {}
+    const dataCountById: Record<string, number> = {};
+    categoryList?.forEach(category => {
+      const categoryId = category.id;
+      const dataCount = category.infoList.reduce((count, info) => count + info.dataList.length, 0);
+      dataCountById[categoryId] = dataCount;
+    }) ?? {}
 
     const infoListByCategory: Record<string, TKernelInfo[]> = {};
     categoryList?.forEach(category => {
@@ -108,7 +108,7 @@ export const kernelCategoryDataSelector = selector({
     return {
       categoryList,
       dataCount,
-      // dataCountById,
+      dataCountById,
       infoListByCategory,
       dataListByCategory,
       // dataListByInfoByCategory,
