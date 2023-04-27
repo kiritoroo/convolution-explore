@@ -72,7 +72,7 @@ export const MotionLabelWrapper: React.FC<ILabelWrapperProps> = React.memo(( pro
       fontSize.current = parseFloat(window.getComputedStyle(labelRef.current).getPropertyValue("font-size"));
     }
   }, []);
-
+  
   return (
     <StyledLabelWrapper
       ref={labelRef}

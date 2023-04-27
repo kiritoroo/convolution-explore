@@ -1,11 +1,13 @@
 import React, { useRef } from 'react';
 import { 
+  AnimatePresence,
   Transition,
   Variants
 } from 'framer-motion';
 import {
   StyledDotWrapper,
-  StyledDot
+  StyledDot,
+  StyledBackground
 } from '@style2d/Loading.styled'
 
 interface IDotWrapperProps {
@@ -54,3 +56,17 @@ export const MotionDot: React.FC<IDotProps> = () => {
   )
 }
 
+interface IBackgroundProps {
+  children: React.ReactNode
+}
+export const MotionBackground: React.FC<IBackgroundProps> = ( props ) => {
+  const { children } = props
+
+  return (
+    <AnimatePresence>
+      <StyledBackground>
+        { children }
+      </StyledBackground>
+    </AnimatePresence>
+  )
+}

@@ -167,12 +167,16 @@ export const MotionCategoryWrapper: React.FC<ICategoryWrapperProps> = React.memo
 
   const [scope, animate] = useAnimate()
 
-  useEffect(() => {
-    if (isCollapseVez) {
-      animate(scope.current, { width: 0 }, { duration: 0.3, delay: index * 0.05 })
+  const handleAnimateCollapseVez = useCallback((isCollapse: boolean) => {
+    if (isCollapse) {
+      animate(scope.current, { width: 0 }, { duration: 0.3, delay: index * 0.06 })
     } else {
-      animate(scope.current, { width: 'auto' }, { duration: 0.5, delay:  -0.2 })
+      animate(scope.current, { width: 'auto' }, { duration: 0.5, delay:  -0.1 })
     }
+  }, [])
+
+  useEffect(() => {
+    handleAnimateCollapseVez(isCollapseVez)
   }, [isCollapseVez])
 
   return (

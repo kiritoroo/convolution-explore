@@ -1,8 +1,11 @@
+import React from "react"
 import { KernelCategory } from "./KernelCategory"
 
-export const Layout = () => {
+export const Layout = React.memo(() => {
 
   return (
-    <KernelCategory/>
+    <React.Fragment>
+      <KernelCategory/>
+    </React.Fragment>
   )
-}
+})

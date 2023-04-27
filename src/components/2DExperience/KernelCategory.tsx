@@ -1,21 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   isCollapseVezKernelCategoryState,
-  isCollapseHozKernelCategoryState
+  isCollapseHozKernelCategoryState,
+  selectedCategoryState
 } from '@store/atoms'
 import {
   kernelCategoryDataSelector
 } from '@store/selectors'
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { KernelCategoryItem } from "@comp2d/KernelCategoryItem";
+import { KernelList } from "@comp2d/KernelList"
 import * as S from '@style2d/KernelCategory.styled';
 import * as M from '@motion2d/KernelCategory.motion';
+import { TKernelCategory } from "@type/index";
 
 interface IProps {}
 
 export const KernelCategory = React.memo((props: IProps) => {
-  const [isShowButtonCollapseHoz, setisShowButtonCollapseHoz] = useState<boolean>(false)
-  const kernelCategoryData = useRecoilValue(kernelCategoryDataSelector);
+  const [ isShowButtonCollapseHoz, setIsShowButtonCollapseHoz ] = useState<boolean>(false)
+  const { categoryList } = useRecoilValue(kernelCategoryDataSelector);
+  const setSelectedCategory = useSetRecoilState(selectedCategoryState);
   const [ isCollapseVez, setIsCollapseVez ] = useRecoilState(isCollapseVezKernelCategoryState);
   const [ isCollapseHoz, setIsCollapseHoz ] = useRecoilState(isCollapseHozKernelCategoryState);
   
@@ -26,6 +30,37 @@ export const KernelCategory = React.memo((props: IProps) => {
   const handleButtonCollapseHozClick = useCallback(() => {
     setIsCollapseHoz((prevState) => !prevState);
   }, []);
+
+  const handleBoudingRectCollapseHozMouseMove = useCallback(() => {
+    setIsShowButtonCollapseHoz(true);
+  }, []);
+
+  const handleBoudingRectCollapseHozMouseLeave = useCallback(() => {
+    setIsShowButtonCollapseHoz(false);
+  }, []);
+
+  const handleCollapseVez = useCallback(() => {
+    setSelectedCategory(null);
+  }, []);
+
+  useEffect(() => {
+    handleCollapseVez()
+  }, [isCollapseVez])
+
+  const createCategoryListItem = useCallback((categoryList: TKernelCategory[]) => {
+    return categoryList.map((item, index) => (
+      <M.MotionCategoryWrapper
+        key={item.id}
+        isCollapseVez={isCollapseVez}
+        index={index}>
+        <KernelCategoryItem categoryData={item}/>
+      </M.MotionCategoryWrapper>
+    ))
+  }, [isCollapseVez]);
+
+  const renderedCategoryListItem = useMemo<JSX.Element[]>(() => {
+    return createCategoryListItem(categoryList ?? [])
+  }, [categoryList, isCollapseVez])
 
   return (
     <React.Fragment>
@@ -38,8 +73,8 @@ export const KernelCategory = React.memo((props: IProps) => {
         </M.MotionButtonCollapseVez>
 
         <S.StyledBoudingRectCollapseHoz
-          onMouseMove={() => setisShowButtonCollapseHoz(true)}
-          onMouseLeave={() => setisShowButtonCollapseHoz(false)}>
+          onMouseMove={handleBoudingRectCollapseHozMouseMove}
+          onMouseLeave={handleBoudingRectCollapseHozMouseLeave}>
           <M.MotionButtonCollapseHoz
             isCollapseVez={isCollapseVez}
             isCollapseHoz={isCollapseHoz}
@@ -50,16 +85,9 @@ export const KernelCategory = React.memo((props: IProps) => {
           </M.MotionButtonCollapseHoz>
         </S.StyledBoudingRectCollapseHoz>
 
-        {/* <M.MotionCategoryListWrapper> */}
-          {kernelCategoryData.categoryList && kernelCategoryData.categoryList.map((item, index) => (
-            <M.MotionCategoryWrapper
-             key={item.id}
-             isCollapseVez={isCollapseVez}
-             index={index}>
-              <KernelCategoryItem categoryData={item}/>
-            </M.MotionCategoryWrapper>
-          ))}
-        {/* </M.MotionCategoryListWrapper> */}
+        { renderedCategoryListItem }
+
+        <KernelList/>
       </S.StyledContainer>
     </React.Fragment>
   )

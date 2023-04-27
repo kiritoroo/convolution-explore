@@ -1,15 +1,17 @@
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { BiFilterAlt, BiSun, BiCustomize, BiTrendingUp } from 'react-icons/bi'
 import { TbLine, TbPuzzle } from 'react-icons/tb'
 import { IoDiamondOutline } from 'react-icons/io5'
 import { TKernelCategory } from "@type/index";
 import {
-  isCollapseHozKernelCategoryState
+  isCollapseHozKernelCategoryState,
+  selectedCategoryState
 } from '@store/atoms';
 import {
-  kernelCategoryDataSelector
+  kernelCategoryDataSelector,
+  selectedCategorySelector
 } from '@store/selectors';
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import * as S from '@style2d/KernelCategoryItem.styled';
 import * as M from '@motion2d/KernelCategoryItem.motion';
 
@@ -24,8 +26,11 @@ interface Props {
 export const KernelCategoryItem = React.memo(( props: Props ) => {
   const { categoryData } = props
 
+  const [ isSelected, setIsSelected ] = useState(false)
   const kernelCategoryData = useRecoilValue(kernelCategoryDataSelector)
   const isCollapseHoz = useRecoilValue(isCollapseHozKernelCategoryState)
+  const selectedCategory = useRecoilValue(selectedCategorySelector);
+  const setSelectedCategory = useSetRecoilState(selectedCategoryState);
 
   const categoryIconMap = useMemo<TCategoryIconMap>(() => ({
     filtering: <BiFilterAlt size={'1.5em'} color='#A882FA'/>,
@@ -44,11 +49,26 @@ export const KernelCategoryItem = React.memo(( props: Props ) => {
     }, 0)
   ), [])
 
+  const handleCategoryClick = useCallback(() => {
+    setSelectedCategory(categoryData.id != selectedCategory.category?.id ? categoryData : null);
+  }, [selectedCategory]);
+
+  const handleIsSelected = useCallback(() => {
+    selectedCategory.category?.id === categoryData.id
+      ? setIsSelected(true)
+      : setIsSelected(false)
+  }, [selectedCategory])
+
+  useEffect(() => {
+    handleIsSelected()
+  }, [selectedCategory])
+
   return (
     <React.Fragment>
-      <S.StyledContainer>
+      <S.StyledContainer 
+        onClick={handleCategoryClick}>
         <M.MotionFlexMain
-          isSelected={false}
+          isSelected={isSelected}
           isCollapseHoz={isCollapseHoz}>
           <S.StyledFlexChild>
             <S.StyledIconWrapper>
