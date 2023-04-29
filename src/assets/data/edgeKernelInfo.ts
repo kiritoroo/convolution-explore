@@ -69,6 +69,17 @@ export const edgeKernelInfo: TKernelInfo[] = [
         dataList: edgeKernelData.filter(data => data.id === 'robertsCrossgy')!
     },
     {
+        id: 'emboss',
+        categoryid: 'edge',
+        label: 'Emboss Kernel',
+        description: 'This type of kernel is used to create an immersive effect for the image, making it look like a photograph has been etched on a surface.',
+        code: '',
+        params: [
+       
+        ],
+        dataList: edgeKernelData.filter(data => data.id === 'emboss')!
+      },
+    {
         id: 'laplacian',
         categoryid: 'edge',
         label: 'Laplacian Kernel',
