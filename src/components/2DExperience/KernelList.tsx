@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import { selectedSizeState } from "@store/atoms";
 import { selectedCategorySelector } from "@store/selectors";
 import { useRecoilValue, useRecoilState } from "recoil";
@@ -18,15 +18,21 @@ export const KernelList = React.memo(( props: Props ) => {
 
   const [selectedSize, setSelectedSize] = useRecoilState(selectedSizeState)
 
+  const [isPending, startTransition] = useTransition();
+
   const handleSelectCategory = useCallback(() => {
     if (selectedCategory.category) {
-      setLastSelectedCategory(selectedCategory)
-      setSelectedSize(selectedCategory.sizeList[0] ?? undefined)
+      startTransition(() => {
+        setLastSelectedCategory(selectedCategory)
+        setSelectedSize(selectedCategory.sizeList[0] ?? undefined)
+      });
     }
   }, [selectedCategory]);
 
   const handleSelectedSize = useCallback((size: number) => {
-    setSelectedSize(size);
+    startTransition(() => {
+      setSelectedSize(size);
+    });
   }, []);
 
   useEffect(() => {

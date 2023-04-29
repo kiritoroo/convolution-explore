@@ -21,7 +21,7 @@ export const MotionContainer: React.FC<IContainerProps> = React.memo(( props ) =
   const { children } = props
 
   const transiton = useRef<Transition>({
-    duration: 0.5
+    duration: 0.5, ease: "easeInOut"
   })
 
   const variants = useRef<Variants>({

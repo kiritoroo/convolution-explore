@@ -38,7 +38,7 @@ export const Cursor = ( props: Props ) => {
 
   const variants = useMemo<Variants>(() => ({
     default: { scale: 1, opacity: 1,
-      x: mouseXPosition - 30/2,
+      x: mouseXPosition - 100/2,
       y: mouseYPosition - 30/2,
       transition: {
         type: "spring",
@@ -46,7 +46,15 @@ export const Cursor = ( props: Props ) => {
       }
     },
     hoverlink: { scale: 1, opacity: 1,
-      x: mouseXPosition - 30/2,
+      x: mouseXPosition - 100/2,
+      y: mouseYPosition - 30/2,
+      transition: {
+        type: "spring",
+        mass: 0.2
+      }
+    },
+    hoverkernel: { scale: 1, opacity: 1,
+      x: mouseXPosition - 100/2,
       y: mouseYPosition - 30/2,
       transition: {
         type: "spring",
@@ -63,7 +71,12 @@ export const Cursor = ( props: Props ) => {
 
   const variants2 = useMemo<Variants>(() => ({
     default: { borderRadius: 50, border: "0px solid white" },
-    hoverlink: { borderRadius: 0, border: "2px solid white", scale: 1.5,
+    hoverlink: { borderRadius: 0, border: "1px solid white", scale: 1.5,
+      transition: {
+        duration: 0.5, ease: "easeInOut",
+      }
+    },
+    hoverkernel: { borderRadius: 0, border: "1px solid white", scale: 2,
       transition: {
         duration: 0.5, ease: "easeInOut",
       }
@@ -73,6 +86,7 @@ export const Cursor = ( props: Props ) => {
   const variants3 = useMemo<Variants>(() => ({
     default: { scale: 1 },
     hoverlink: { scale: 0.5 },
+    hoverkernel: { scale: 0.3 },
   }), [mouseXPosition, mouseYPosition])
 
   const [scopeBorder, animate] = useAnimate()
@@ -80,7 +94,11 @@ export const Cursor = ( props: Props ) => {
   useEffect(() => {
     if (cursorVariant == "hoverlink") {
       animate(scopeBorder.current, { rotate: 360 + 45 }, { duration: 5, repeat: Infinity })
-    } else {
+    } 
+    else if (cursorVariant == "hoverkernel") {
+      animate(scopeBorder.current, { rotate: 360 + 45 }, { duration: 3, repeat: Infinity })
+    } 
+    else {
       animate(scopeBorder.current, { rotate: 45 }, { duration: 0.2 })
     }
   }, [cursorVariant])

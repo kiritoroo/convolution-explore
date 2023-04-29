@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { BiFilterAlt, BiSun, BiCustomize, BiTrendingUp } from 'react-icons/bi'
 import { TbLine, TbPuzzle } from 'react-icons/tb'
 import { IoDiamondOutline } from 'react-icons/io5'
@@ -32,6 +32,8 @@ export const KernelCategoryItem = React.memo(( props: Props ) => {
   const selectedCategory = useRecoilValue(selectedCategorySelector);
   const setSelectedCategory = useSetRecoilState(selectedCategoryState);
 
+  const [isPending, startTransition] = useTransition();
+
   const categoryIconMap = useMemo<TCategoryIconMap>(() => ({
     filtering: <BiFilterAlt size={'1.5em'} color='#A882FA'/>,
     intensity: <BiSun size={'1.5em'} color='#A882FA'/>,
@@ -50,7 +52,9 @@ export const KernelCategoryItem = React.memo(( props: Props ) => {
   ), [])
 
   const handleCategoryClick = useCallback(() => {
-    setSelectedCategory(categoryData.id != selectedCategory.category?.id ? categoryData : null);
+    startTransition(() => {
+      setSelectedCategory(categoryData.id != selectedCategory.category?.id ? categoryData : null);
+    })
   }, [selectedCategory]);
 
   const handleIsSelected = useCallback(() => {

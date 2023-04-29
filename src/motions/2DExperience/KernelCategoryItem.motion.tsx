@@ -63,7 +63,6 @@ export const MotionLabelWrapper: React.FC<ILabelWrapperProps> = React.memo(( pro
   const transition = useRef<Transition>({});
 
   const variants = useMemo<Variants>(() => ({
-    hidden: { opacity: 1, scaleX: 1, width: "auto", height: 'auto' },
     collapse: { opacity: 0, scaleX: 0, width: 0, height: 0 },
     expand: { opacity: 1, scaleX: 1, width: maxLength * fontSize/2+10, height: 'auto' }
   }), [maxLength, fontSize]);
@@ -80,7 +79,7 @@ export const MotionLabelWrapper: React.FC<ILabelWrapperProps> = React.memo(( pro
       variants={ variants }
       transition={ transition.current }
       style={{ originX: 0, originY: 0.5 }}
-      initial={ "hidden" }
+      initial={ isCollapseHoz ? "collapse" : "expand" }
       animate={ isCollapseHoz ? "collapse" : "expand" }
     >
       { children }

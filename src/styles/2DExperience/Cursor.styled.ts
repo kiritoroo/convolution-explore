@@ -9,16 +9,18 @@ export const StyledContainer = styled(motion.div)`
   left: 0;
   z-index: 100;
   user-select: none;
-  pointer-events: none
+  pointer-events: none;
 `
 
 export const StyledCursorWrapper = styled(motion.div)`
+  width: 100px;
+  height: 100px;
   position: fixed;
   top: 0;
   left: 0;
   display: flex;
   flex-flow: column;
-  align-content: center;
+  align-items: center;
   justify-content: center;
   pointer-events: none;
 `
@@ -43,8 +45,9 @@ export const StyledCursorDot = styled(motion.div)`
 `
 
 export const StyledLabelWrapper = styled.div`
-  flex: auto;
-  font-size: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
   margin: auto;
   font-size: 16px;
