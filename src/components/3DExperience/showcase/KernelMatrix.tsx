@@ -16,11 +16,11 @@ interface ChildProps {
 
 }
 
-export const KernelMatrix = (props: ChildProps) => {
+export const KernelMatrix = React.memo((props: ChildProps) => {
   const selectedKernel = useRecoilValue(selectedKernelSelector)
   const { randIndicesAnim } = useRecoilValue(selectedSizeSelector)
   const [isPending, startTransition] = useTransition();
-  
+
   const ref = useRef<any>()
   const { camera } = useThree()
 
@@ -59,13 +59,13 @@ export const KernelMatrix = (props: ChildProps) => {
       matrix.map((row: number[], i: number) => (
         row.map((value: number, j: number) => (
           <KernelBlock
-            key={`${i}-${j}-${value}-${matrix[0].length}`}
+            key={`${i}-${j}-${Math.random()*value}-${matrix[0].length}`}
             args={{ 
               position: [i, 0, -j],
               rotation: [0, 0, 0]}}
             value={value}
-            valMax={valMax}
-            index={i*selectedKernel.data!.size+j}/>
+            valMax={ valMax }
+            index={ i*matrix[0].length+j }/>
         ))
       ))
     )
@@ -82,4 +82,4 @@ export const KernelMatrix = (props: ChildProps) => {
       </Float>
     </group>
     )
-}
+})

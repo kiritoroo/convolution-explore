@@ -147,29 +147,11 @@ export const edgeKernelData: TKernelData[] = [
   },
   {
     id: "robertsCrossgx",
-    size: 2,
-    matrix: [
-      [1, 0],
-      [0, -1],
-    ],
-    coef: 1,
-  },
-  {
-    id: "robertsCrossgx",
     size: 3,
     matrix: [
       [-1, 0, 1],
       [-2, 0, 2],
       [-1, 0, 1],
-    ],
-    coef: 1,
-  },
-  {
-    id: "robertsCrossgy",
-    size: 2,
-    matrix: [
-      [0, 1],
-      [-1, 0],
     ],
     coef: 1,
   },
