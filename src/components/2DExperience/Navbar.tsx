@@ -15,9 +15,7 @@ export const Navbar = ( props: Props ) => {
   const location = useLocation();
 
   const handleOnLinkClick = useCallback((to: string) => {
-    if (location.pathname === to) {
-      return;
-    }
+    if (location.pathname === to) return;
     setIsLoading(true)
   }, [])
 
