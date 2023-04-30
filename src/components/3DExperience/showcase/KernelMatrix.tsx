@@ -77,7 +77,7 @@ export const KernelMatrix = React.memo((props: ChildProps) => {
 
   return (
     <group ref={ref} position={[0, 0, 0]}>
-      <Float position={[-selectedKernel.data!.size/3, 0.5, selectedKernel.data!.size/3]} floatIntensity={3} rotationIntensity={0} speed={1}>
+      <Float position={[-selectedKernel.data!.size/2, 0.5, selectedKernel.data!.size/3]} floatIntensity={3} rotationIntensity={0} speed={1}>
         { renderedMatrix }
       </Float>
     </group>

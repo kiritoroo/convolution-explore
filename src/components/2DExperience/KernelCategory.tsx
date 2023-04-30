@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   isCollapseVezKernelCategoryState,
   isCollapseHozKernelCategoryState,
-  selectedCategoryState
+  selectedCategoryState,
+  isFocusKernelInfoState
 } from '@store/atoms'
 import {
   kernelCategoryDataSelector
@@ -22,9 +23,11 @@ export const KernelCategory = React.memo((props: IProps) => {
   const setSelectedCategory = useSetRecoilState(selectedCategoryState);
   const [ isCollapseVez, setIsCollapseVez ] = useRecoilState(isCollapseVezKernelCategoryState);
   const [ isCollapseHoz, setIsCollapseHoz ] = useRecoilState(isCollapseHozKernelCategoryState);
-  
+  const [isFocusKernelInfo, setIsFocusKernelInfo] = useRecoilState(isFocusKernelInfoState)
+
   const handleButtonCollapseVezClick = useCallback(() => {
     setIsCollapseVez((prevState) => !prevState);
+    setIsFocusKernelInfo(false)
   }, []);
 
   const handleButtonCollapseHozClick = useCallback(() => {

@@ -1,9 +1,8 @@
 import React, { useEffect, Suspense, useCallback, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { kernelCategory as data } from "@asset/data/kernelCategory";
-import { isLoadingState, kernelCategoryDataState } from '@store/atoms'
+import { isLoadingResourcesState, isLoadingState, kernelCategoryDataState, resourcesState } from '@store/atoms'
 import { Loading } from '@comp2d/Loading'
-import { Layout } from '@comp2d/Layout'
 import { Routes, Route, HashRouter } from "react-router-dom"
 import { IntroCanvas } from '@comp3d/Intro/IntroCanvas';
 import { Navbar } from '@comp/2DExperience/Navbar';
@@ -14,10 +13,14 @@ import { LoadingBox } from '@comp/2DExperience/LoadingBox';
 import { AnimatePresence } from 'framer-motion';
 import { emitEvent } from '@util/Event';
 import { Cursor } from '@comp/2DExperience/Cursor';
+import { useLayoutEffect } from 'react';
+import Resources from '@util/Resources';
+import { assets } from './assets';
 
 export const App = () => {
   const isLoading = useRecoilValue(isLoadingState)
-
+  const [isLoadingResources, setIsLoadingResources] = useRecoilState(isLoadingResourcesState);
+  const setResources = useSetRecoilState(resourcesState);
   const setKernelCategoryData = useSetRecoilState(kernelCategoryDataState)
 
   useEffect(() => {
@@ -34,6 +37,15 @@ export const App = () => {
     update();
   }, [])
 
+  useLayoutEffect(() => {
+    const resouces = new Resources(assets);
+
+    document.addEventListener('eResourcesReady', () => {
+      setResources(resouces.items)
+      setIsLoadingResources(false)
+    })
+  }, [])
+
   return (
     <React.Fragment>
       {/* <IntroCanvas/> */}
@@ -41,7 +53,7 @@ export const App = () => {
       {/* <Loading/> */}
       
       <AnimatePresence>
-        { isLoading && <LoadingBox/> }
+        { (isLoading || isLoadingResources) && <LoadingBox/> }
       </AnimatePresence>
 
       <AnimatePresence>
