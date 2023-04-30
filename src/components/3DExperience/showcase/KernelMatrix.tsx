@@ -11,6 +11,7 @@ import {
 } from "@store/selectors";
 import { useRecoilValue } from "recoil";
 import { camAnimSelectKernel } from "./CameraControls";
+import { isRenderSceneState } from "@store/atoms";
 
 interface ChildProps {
 
@@ -20,7 +21,8 @@ export const KernelMatrix = React.memo((props: ChildProps) => {
   const selectedKernel = useRecoilValue(selectedKernelSelector)
   const { randIndicesAnim } = useRecoilValue(selectedSizeSelector)
   const [isPending, startTransition] = useTransition();
-
+  const isRenderScene = useRecoilValue(isRenderSceneState);
+  
   const ref = useRef<any>()
   const { camera } = useThree()
 
@@ -76,10 +78,12 @@ export const KernelMatrix = React.memo((props: ChildProps) => {
   }, [selectedKernel.data])
 
   return (
-    <group ref={ref} position={[0, 0, 0]}>
-      <Float position={[-selectedKernel.data!.size/2, 0.5, selectedKernel.data!.size/3]} floatIntensity={3} rotationIntensity={0} speed={1}>
+    <group ref={ref} position={[0, 0.5, 0]}>
+      <Center>
+      {/* <Float floatIntensity={3} rotationIntensity={0} speed={1}> */}
         { renderedMatrix }
-      </Float>
+      {/* </Float> */}
+      </Center>
     </group>
     )
 })

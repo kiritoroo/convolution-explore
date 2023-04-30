@@ -87,7 +87,7 @@ export const camAnimFocusKernelIn =  (camera: THREE.Camera, kernelSize: number, 
 export const camAnimFocusKernelOut = (camera: THREE.Camera, kernelSize: number, onComplete: () => void) => {
   const desPos =new THREE.Vector3(15+kernelSize, 15+kernelSize, 15+kernelSize)
 
-  const DURATION = 1
+  const DURATION = 1.5  
   const EASE = "power4"
 
   timeline ? (timeline as gsap.core.Timeline).clear() : null

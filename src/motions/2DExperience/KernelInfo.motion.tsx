@@ -66,7 +66,7 @@ export const MotionInfoWrapper: React.FC<IInfoWrapperProps> = React.memo(( props
       variants={ variants.current }
       transition={ transition.current }
       initial="hidden"
-      animate="show"
+      animate={isFocusKernel ? "show" : "hidden"}
       exit="exit"
     >
       { children }

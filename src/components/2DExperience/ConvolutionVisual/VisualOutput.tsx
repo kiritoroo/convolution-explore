@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 import * as S from '@style/2DExperience/ConvolutionVisual/VisualOutput.styled';
 import { useRecoilValue } from 'recoil';
 import { selectedImageOutputSelector } from '@store/selectors';
@@ -8,11 +8,33 @@ interface Props {
 
 }
 
-export const VisualOutput = React.memo(( props: Props ) => {
+interface Refs {
+  svgElement: React.RefObject<SVGSVGElement>
+  svgRects1d: SVGRectElement[]
+}
+
+export const VisualOutput = React.memo(React.forwardRef<Refs, Props>(( props, ref ) => {
   const imageOut = useRecoilValue(selectedImageOutputSelector);
   const pixelSize = imageOut.w == 32 ? 8 : imageOut.w == 48 ? 5 : 4;
+
   const svgRef = useRef<SVGSVGElement>(null)
-  // console.log(imageOut)
+
+  useImperativeHandle(ref, () => {
+    return {
+      svgElement: svgRef,
+      svgRects1d: (svgRef.current?.childNodes ?? []) as SVGRectElement[]
+    }
+  }, [svgRef.current])
+
+  const fillWhite = useCallback(() => {
+    Array.from({ length: imageOut.h }, (_, i) => {
+      Array.from({ length: imageOut.h }, (_, j) => {
+        const index = i * imageOut.w + j;
+        (svgRef.current?.childNodes[index] as SVGRectElement)
+          .setAttribute("fill", `rgb(${255}, ${255}, ${255}, ${1})`);
+      }
+    )})
+  }, [imageOut, svgRef.current])
 
   const fillOutput = useCallback(() => {
     imageOut.rgb2dOut.map((row: TColor[], i: number) => {
@@ -32,7 +54,7 @@ export const VisualOutput = React.memo(( props: Props ) => {
 
   return (
     <S.Styledcontainer>
-      <div>Output {imageOut.w}x{imageOut.h}</div>
+      <S.StyledLabel>Image Output ({imageOut.w}x{imageOut.h})</S.StyledLabel>
       <S.StyledImageWrapper>
         <S.StyledImage ref={svgRef} width={imageOut.w*pixelSize} height={imageOut.h*pixelSize}>
         {Array.from({ length: imageOut.h }, (_, i) => (
@@ -51,4 +73,4 @@ export const VisualOutput = React.memo(( props: Props ) => {
       </S.StyledImageWrapper>
     </S.Styledcontainer>
   )
-})
+}))

@@ -4,7 +4,7 @@ import { KernelCategory } from "@comp2d/KernelCategory"
 import { ShowcaseCanvas } from '@comp/3DExperience/showcase/ShowcaseCanvas';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { KernelCardList } from '@comp/2DExperience/KernelCardList';
-import { cursorVariantState, isFocusKernelInfoState, kernelCategoryDataState } from '@store/atoms';
+import { cursorVariantState, isCollapseVezKernelCategoryState, isFocusKernelInfoState, isRenderSceneState, kernelCategoryDataState } from '@store/atoms';
 import { kernelCategory as data } from "@asset/data/kernelCategory";
 import { LoadingBox } from '@comp/2DExperience/LoadingBox';
 import { isLoadingState } from '@store/atoms';
@@ -20,9 +20,15 @@ export default function ShowcasePage( props: Props ) {
   const [isPending, startTransition] = useTransition();
   const isLoading = useRecoilValue(isLoadingState);
   const isFocusKernelInfo = useRecoilValue(isFocusKernelInfoState);
+  const setIsRenderScene = useSetRecoilState(isRenderSceneState);
+  const setIsCollapseVez = useSetRecoilState(isCollapseVezKernelCategoryState);
+  const setIsFocusKernelInfo = useSetRecoilState(isFocusKernelInfoState);
 
   useLayoutEffect(() => {
     startTransition(() => {
+      setIsRenderScene(true)
+      setIsCollapseVez(false);
+      setIsFocusKernelInfo(false)
       setKernelCategoryData((prevData) => prevData ? prevData : data)
     })
   }, [])
@@ -37,7 +43,7 @@ export default function ShowcasePage( props: Props ) {
     <React.Fragment>
       <ShowcaseCanvas/>
       <AnimatePresence>
-        { <KernelInfo/> }
+        { !isLoading && <KernelInfo/> }
       </AnimatePresence>
       { !isLoading && <KernelCategory/> }
       {/* <KernelCardList/> */}

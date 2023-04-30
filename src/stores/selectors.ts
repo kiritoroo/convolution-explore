@@ -233,21 +233,23 @@ export const selectedKernelSelector = selector({
     const info: TKernelInfo | null = kernel?.info ?? null
     const data: TKernelData | null = kernel?.data ?? null
     const matrix1D: number[] = data?.matrix.flat() ?? []
-    // const matrix2D: number[][] = data?.matrix ?? []
+    const matrix2D: number[][] = data?.matrix ?? []
     const matrixCoef1D: number[] = matrix1D.map(val => val * (data?.coef ?? 1))
     // const matrixCoef2D: number[][] = matrix2D.map(row => row.map(val => val * (data?.coef ?? 1)));
+    const maxValue: number = Math.maxOfMatrix(matrix2D)
 
     return {
       info,
       data,
       matrix1D,
-      matrixCoef1D
+      matrixCoef1D,
+      maxValue
     }
   }
 })
 
-export const selectedImageTextureSelector = selector(({
-  key: 'selectedImageTextureSelector',
+export const selectedImageInputSelector = selector(({
+  key: 'selectedImageInputSelector',
   get: ({get}) => {
     const texture: THREE.Texture | null = get(selectedImageTextureState)
     const data: ImageData | null = texture ? ImageUtils.getDataTexture(texture.image) : null
@@ -325,7 +327,7 @@ export const selectedImageOutputSelector = selector(({
   key: 'selectedImageOutputSelector',
   get: ({get}) => {
     const kernel = get(selectedKernelSelector)
-    const imageIn = get(selectedImageTextureSelector)
+    const imageIn = get(selectedImageInputSelector)
     const kernelSize = kernel.data?.size ?? 0
     const w = imageIn.w
     const h = imageIn.h
@@ -352,23 +354,12 @@ export const selectedImageOutputSelector = selector(({
             }
           }
 
-          const windowSliceOutColor: TColor = {
-            r: Math
-            .mularr(windowSliceInRed, kernel.matrixCoef1D)
-            .reduce((acc, value) => acc + value, 0),
-            g: Math
-              .mularr(windowSliceInGreen, kernel.matrixCoef1D)
-              .reduce((acc, value) => acc + value, 0),
-            b: Math
-              .mularr(windowSliceInBlue, kernel.matrixCoef1D)
-              .reduce((acc, value) => acc + value, 0),
-          }
-
-          const windowSliceOutGray: number = ImageUtils.rgb2Gray(
-            windowSliceOutColor.r,
-            windowSliceOutColor.g,
-            windowSliceOutColor.b,
+          const result = kernel.info?.func(
+            windowSliceInRed, windowSliceInGreen, windowSliceInBlue, kernel.data!.size, kernel.matrixCoef1D
           )
+
+          const windowSliceOutColor = result?.outRGB ?? { r: 255, g: 255, b:255 };
+          const windowSliceOutGray = result?.outGray ?? 255;
 
           const indexOut2D = {
             x: x + Math.floor(kernelSize/2),

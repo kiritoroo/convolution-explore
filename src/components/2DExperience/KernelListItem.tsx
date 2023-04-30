@@ -62,10 +62,11 @@ export const KernelListItem = React.memo(( props: Props ) => {
           { info.label }
         </S.StyledLabelWrapper>
 
-        <S.StyledMatrixWrapper
-          onClick={handleMatrixClick}>
+        <M.MotionMatrixWrapper
+          onClick={handleMatrixClick}
+          isSelected={ isSelected }>
           { renderedMatrix }
-        </S.StyledMatrixWrapper>
+        </M.MotionMatrixWrapper>
       </S.StyledContainer>
     </React.Fragment>
   )

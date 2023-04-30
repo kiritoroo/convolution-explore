@@ -37,12 +37,11 @@ export const MotionFlexMain: React.FC<IFlexMainProps> = React.memo(( props ) => 
     ]},
   });
 
-
   return (
     <StyledFlexMain
       variants={variants.current}
       transition={transition.current}
-      initial={"hidden"}
+      initial={"unselect"}
       animate={ isSelected ? "selected" : "unselect" }
     >
       { children }

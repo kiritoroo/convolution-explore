@@ -6,10 +6,47 @@ import {
   useAnimate
 } from 'framer-motion';
 import {
+  StyledMatrixWrapper,
     StyledMatrixItem
 } from '@style2d/KernelListItem.styled'
 import { useRecoilValue } from 'recoil';
 import { selectedSizeSelector } from '@store/selectors';
+
+interface IMatrixWrapperProps {
+  children: React.ReactNode
+  onClick: () => void
+  isSelected: boolean
+}
+export const MotionMatrixWrapper: React.FC<IMatrixWrapperProps> = React.memo(( props ) => {
+  const { children, isSelected, onClick } = props;
+
+  const transition = useRef<Transition>({
+    duration: 2, repeat: Infinity, ease: "linear"
+  });
+
+  const variants = useRef<Variants>({
+    unselect: { background:
+      "linear-gradient(to bottom, rgb(255, 255, 255, 0.2) 0%, rgb(255, 255, 255, 0.5) 100%)"
+    },
+    selected: { background: [
+      "linear-gradient(to right, rgb(237, 230, 253, 0.8) -200%, rgb(255, 255, 255, 0.2) -100%, rgb(237, 230, 253, 0.8) 0%, rgb(255, 255, 255, 0.2) 100%)",
+      "linear-gradient(to right, rgb(237, 230, 253, 0.8) -100%, rgb(255, 255, 255, 0.2) 0%, rgb(237, 230, 253, 0.8) 100%, rgb(255, 255, 255, 0.2) 200%)",
+      "linear-gradient(to right, rgb(237, 230, 253, 0.8) 0%, rgb(255, 255, 255, 0.2) 100%, rgb(237, 230, 253, 0.8) 200%, rgb(255, 255, 255, 0.2) 300%)"
+    ]}
+  });
+
+  return (
+    <StyledMatrixWrapper
+      onClick={ onClick }
+      variants={ variants.current }
+      transition={ transition.current }
+      initial="unselect"
+      animate={ isSelected ? "selected" : "unselect" }
+    >
+      { children }
+    </StyledMatrixWrapper>
+  )
+})
 
 interface IMatrixItemProps {
   children: React.ReactNode

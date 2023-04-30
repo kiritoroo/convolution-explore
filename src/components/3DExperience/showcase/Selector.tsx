@@ -38,7 +38,7 @@ export const Selector = (props: Props) => {
   useEffect(() => {
     if (isFocusKernelInfo) {
       startTransition(() => {
-        camAnimFocusKernelIn(camera, selecterKernel.data!.size, () => {})
+        camAnimFocusKernelIn(camera, selecterKernel.data!.size, () => { setIsRenderScene(false) })
       })
     } else {
       startTransition(() => {
@@ -58,6 +58,7 @@ export const Selector = (props: Props) => {
   }, [isFocusKernelInfo])
 
   const handleOnUnSelect = useCallback(() => {
+    setIsRenderScene(true)
     startTransition(() => {
       setIsFocusKernelInfo(false)
       setIsCollapseVezKernelCategory(false)
@@ -101,7 +102,7 @@ export const Selector = (props: Props) => {
           roughness={0.4}
           distortion={0.25}
           distortionScale={0.25}
-          temporalDistortion={0.4}
+          temporalDistortion={0}
           ior={0.83}
           toneMapped={true} />
       </mesh>

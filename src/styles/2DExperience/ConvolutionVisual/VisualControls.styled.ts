@@ -22,10 +22,12 @@ export const StyledVisualWrapper = styled.div`
 export const StyledLabel = styled.div`
   font-size: 1.5em;
   font-weight: 500;
+  margin-bottom: 10px;
 `
 
 export const StyledHint = styled.div`
   font-size: 0.85em;
   font-style: italic;
   font-weight: 300;
+  margin-top: 15px;
 `

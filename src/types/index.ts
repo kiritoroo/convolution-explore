@@ -9,7 +9,13 @@ export interface TKernelInfo {
   categoryid: string;
   label: string;
   description: string;
-  code: string;
+  func: (
+    windSliceRed: number[], 
+    windSliceGreen: number[], 
+    windSliceBlue: number[], 
+    ksize: number,
+    kmatrix: number[]
+  ) => { outRGB: TColor, outGray: number };
   params: string[]
   dataList: TKernelData[]
 }

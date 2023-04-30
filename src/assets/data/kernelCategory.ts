@@ -13,34 +13,34 @@ export const kernelCategory: TKernelCategory[] = [
     label: 'Filtering Kernels',
     infoList: filteringKernelInfo
   },
-  {
-    id: 'intensity',
-    label: 'Intensity Kernels',
-    infoList: intensityKernelInfo
-  },
-  {
-    id: 'edge',
-    label: 'Edge Kernels',
-    infoList: edgeKernelInfo
-  },
-  {
-    id: 'segmentation',
-    label: 'Segmentation Kernels',
-    infoList: segmentationKernelInfo
-  },
-  {
-    id: 'enhancement',
-    label: 'Enhancement Kernels',
-    infoList: enhancementKernelInfo
-  },
-  {
-    id: 'special',
-    label: 'Special Kernels',
-    infoList: specialKernelInfo 
-  },
-  {
-    id: 'custom',
-    label: 'Custom Kernels',
-    infoList: customKernelInfo
-  }
+  // {
+  //   id: 'intensity',
+  //   label: 'Intensity Kernels',
+  //   infoList: intensityKernelInfo
+  // },
+  // {
+  //   id: 'edge',
+  //   label: 'Edge Kernels',
+  //   infoList: edgeKernelInfo
+  // },
+  // {
+  //   id: 'segmentation',
+  //   label: 'Segmentation Kernels',
+  //   infoList: segmentationKernelInfo
+  // },
+  // {
+  //   id: 'enhancement',
+  //   label: 'Enhancement Kernels',
+  //   infoList: enhancementKernelInfo
+  // },
+  // {
+  //   id: 'special',
+  //   label: 'Special Kernels',
+  //   infoList: specialKernelInfo 
+  // },
+  // {
+  //   id: 'custom',
+  //   label: 'Custom Kernels',
+  //   infoList: customKernelInfo
+  // }
 ]
