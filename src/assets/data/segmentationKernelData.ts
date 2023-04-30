@@ -66,5 +66,5 @@ export const segmentationKernelData: TKernelData[] = [
           [1,1,1,1,1,1,1],
           [1,1,1,1,1,1,1]],
         coef: 1
-      },
+      }
 ]

@@ -234,4 +234,3 @@ export const edgeKernelData: TKernelData[] = [
         coef: 1
       },
 ]
-

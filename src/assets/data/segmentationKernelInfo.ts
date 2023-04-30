@@ -45,5 +45,5 @@ export const segmentationKernelInfo: TKernelInfo[] = [
       
         ],
         dataList: segmentationKernelData.filter(data => data.id === 'canny')!
-    },
+    }
 ]

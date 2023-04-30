@@ -25,5 +25,16 @@ export const filteringKernelInfo: TKernelInfo[] = [
       'ksize: Kernel size, it is an odd number'
     ],
     dataList: filteringKernelData.filter(data => data.id === 'averaging')!
+  },
+  {
+    id: 'median',
+    categoryid: 'filtering',
+    label: 'Median Kernel',
+    description: 'Averaging kernel is used to remove noise in the image by filtering the median value of the pixels.',
+    code: '',
+    params: [
+   
+    ],
+    dataList: filteringKernelData.filter(data => data.id === 'median')!
   }
 ]

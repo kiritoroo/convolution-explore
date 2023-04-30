@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled(motion.div)`
   position: absolute;
-  top: 5%;
+  top: 12%;
   left: 5%;
   width: auto;
   height: auto;

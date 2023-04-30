@@ -57,28 +57,6 @@ export const intensityKernelInfo: TKernelInfo[] = [
         ],
         dataList: intensityKernelData.filter(data => data.id === 'blur')!
       },
-      // {
-      //   id: 'dilate',
-      //   categoryid: 'intensity',
-      //   label: 'Dilate Kernel',
-      //   description: 'This type of kernel is used to enlarge objects in an image.',
-      //   code: '',
-      //   params: [
-       
-      //   ],
-      //   dataList: intensityKernelData.filter(data => data.id === 'dilate')!
-      // },
-      // {
-      //   id: 'erode',
-      //   categoryid: 'intensity',
-      //   label: 'Erode Kernel',
-      //   description: 'This type of kernel is used to shrink objects in the image.',
-      //   code: '',
-      //   params: [
-       
-      //   ],
-      //   dataList: intensityKernelData.filter(data => data.id === 'erode')!
-      // },
       {
         id: 'sharpen',
         categoryid: 'intensity',
@@ -89,5 +67,5 @@ export const intensityKernelInfo: TKernelInfo[] = [
        
         ],
         dataList: intensityKernelData.filter(data => data.id === 'sharpen')!
-      },
+      }
 ]

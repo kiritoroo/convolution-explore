@@ -64,7 +64,7 @@ export const KernelCategory = React.memo((props: IProps) => {
 
   return (
     <React.Fragment>
-      <S.StyledContainer>
+      <M.MotionContainer>
         <M.MotionButtonCollapseVez 
           isCollapseVez={isCollapseVez}
           onClick={handleButtonCollapseVezClick}>
@@ -88,7 +88,7 @@ export const KernelCategory = React.memo((props: IProps) => {
         { renderedCategoryListItem }
 
         <KernelList/>
-      </S.StyledContainer>
+      </M.MotionContainer>
     </React.Fragment>
   )
 })

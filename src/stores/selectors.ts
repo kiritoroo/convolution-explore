@@ -38,24 +38,37 @@ export const kernelCategoryDataSelector = selector({
       dataCountById[categoryId] = dataCount;
     }) ?? {}
 
-    // const infoListByCategory: Record<string, TKernelInfo[]> = {};
-    // categoryList?.forEach(category => {
-    //   const categoryId = category.id
-    //   const infoList = category.infoList
-    //   infoListByCategory[categoryId] = infoList
-    // }) ?? {}
+    const infoListByCategory: Record<string, TKernelInfo[]> = {};
+    categoryList?.forEach(category => {
+      const categoryId = category.id
+      const infoList = category.infoList
+      infoListByCategory[categoryId] = infoList
+    }) ?? {}
 
-    // const dataListByCategory: Record<string, TData[]> = {};
-    // categoryList?.forEach(category => {
-    //   const categoryId = category.id
-    //   const infoList = infoListByCategory[`${categoryId}`]
-    //   const dataList: TData[] = infoList?.flatMap(info => {
-    //     return info.dataList.map(data => {
-    //       return { info: info, data: data }
-    //     })
-    //   }) ?? []
-    //   dataListByCategory[categoryId] = dataList
-    // }) ?? {}
+    const dataListByCategory: Record<string, TData[]> = {};
+    categoryList?.forEach(category => {
+      const categoryId = category.id
+      const infoList = infoListByCategory[`${categoryId}`]
+      const dataList: TData[] = infoList?.flatMap(info => {
+        return info.dataList.map(data => {
+          return { info: info, data: data }
+        })
+      }) ?? []
+      dataListByCategory[categoryId] = dataList
+    }) ?? {}
+
+    let dataListBySize: Record<string, TKernelData[]> = categoryList?.reduce((acc: Record<string, TKernelData[]>, category) => {
+      category.infoList.forEach(info => {
+        info.dataList.forEach(data => {
+          const size = data.size;
+          if (!acc[size]) {
+            acc[size] = [];
+          }
+          acc[size].push(data);
+        });
+      });
+      return acc;
+    }, {}) ?? {}
 
     // const dataListByInfoByCategory: Record<string, TDataByInfo[]> = {};
     // categoryList?.forEach(category => {
@@ -112,8 +125,9 @@ export const kernelCategoryDataSelector = selector({
       categoryList,
       dataCount,
       dataCountById,
-      // infoListByCategory,
-      // dataListByCategory,
+      dataListBySize,
+      infoListByCategory,
+      dataListByCategory,
       // dataListByInfoByCategory,
       // dataListBySizeByCategory,
       // dataListBySizeObjByCategory
@@ -198,8 +212,10 @@ export const selectedSizeSelector = selector({
       indices1DCenter2Outside,
       indices1DOutside2Center
     ]
-    const randIndicesAnim = indicesAnimList[Math.floor(Math.random() * indicesAnimList.length)];
-
+    const randIndicesAnim = size == 3 
+      ? indicesCross : size == 5 
+      ? indices1DOutside2Center 
+      : indices1DCenter2Outside
 
     return {
       size,

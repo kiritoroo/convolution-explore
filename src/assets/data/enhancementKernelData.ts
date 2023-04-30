@@ -33,5 +33,5 @@ export const enhancementKernelData: TKernelData[] = [
           [-1,-3,-3,-3,-3,-3,-1],
           [-1,-1,-1,-1,-1,-1,-1]],
         coef: 1
-      },
+      }
 ]

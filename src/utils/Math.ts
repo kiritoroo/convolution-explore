@@ -107,4 +107,8 @@ Math.getIndicesByDistance = (n: number, x: number, y: number, diagonal: boolean)
   return distances.map((d) => d.index);
 }
 
+Math.maxOfMatrix = (matrix: number[][]): number => {
+  return matrix.reduce((maxRow, row) => Math.max(maxRow, Math.max(...row)), -Infinity);
+}
+
 export {};

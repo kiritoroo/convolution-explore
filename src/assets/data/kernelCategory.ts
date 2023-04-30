@@ -3,6 +3,9 @@ import { filteringKernelInfo } from "@asset/data/filteringKernelInfo";
 import { intensityKernelInfo } from "@asset/data/intensityKernelInfo";
 import { edgeKernelInfo } from "@asset/data/edgeKernelInfo";
 import { segmentationKernelInfo } from "./segmentationKernelInfo";
+import { enhancementKernelInfo } from "./enhancementKernelInfo";
+import { specialKernelInfo } from "./specialKernelInfo";
+import { customKernelInfo } from "./customKernelInfo";
 
 export const kernelCategory: TKernelCategory[] = [
   {
@@ -28,16 +31,16 @@ export const kernelCategory: TKernelCategory[] = [
   {
     id: 'enhancement',
     label: 'Enhancement Kernels',
-    infoList: segmentationKernelInfo
+    infoList: enhancementKernelInfo
   },
   {
     id: 'special',
     label: 'Special Kernels',
-    infoList: segmentationKernelInfo
+    infoList: specialKernelInfo 
   },
   {
     id: 'custom',
     label: 'Custom Kernels',
-    infoList: segmentationKernelInfo
+    infoList: customKernelInfo
   }
 ]

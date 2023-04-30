@@ -5,6 +5,7 @@ import {
   useAnimate
 } from 'framer-motion';
 import {
+  StyledContainer,
   StyledButtonCollapseVez,
   StyledIconCollapseVez,
   StyledButtonCollapseHoz,
@@ -12,6 +13,35 @@ import {
   StyledCategoryListWrapper,
   StyledCategoryWrapper
 } from '@style2d/KernelCategory.styled'
+
+interface IContainerProps {
+  children: React.ReactNode
+}
+export const MotionContainer: React.FC<IContainerProps> = React.memo(( props ) => {
+  const { children } = props
+
+  const transiton = useRef<Transition>({
+    duration: 0.5, ease: "easeInOut"
+  })
+
+  const variants = useRef<Variants>({
+    hidden: { x: -100 },
+    enter: { x: 0 },
+    exit: { x: -100 }
+  })
+
+  return (
+    <StyledContainer
+      variants={ variants.current }
+      transition={ transiton.current }
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+    >
+      { children }
+    </StyledContainer>
+  )
+})
 
 interface IButtonCollapseVezProps {
   children: React.ReactNode,
@@ -125,7 +155,7 @@ export const MotionIconCollapseHoz: React.FC<IIconCollapseHozProps> = React.memo
       style={{ originX: 0.5, originY: 0.55 }}
       variants={ variants.current }
       transition={ transition.current }
-      initial={ isCollapseHoz ? 'collapse' : 'expand' }
+      initial={ 'collapse' }
       animate={ isCollapseHoz ? 'collapse' : 'expand' }
     >
       <svg width="15" height="15" viewBox="0 0 20 20">
@@ -161,7 +191,7 @@ export const MotionCategoryWrapper: React.FC<ICategoryWrapperProps> = React.memo
   });
 
   const variants = useRef<Variants>({
-    collapse: { opacity: 0, scale: 0, height: 0, width: 0 },
+    collapse: { opacity: 0, scale: 0, height: 0, width: 'auto' },
     expand: { opacity: 1, scale: 1, height: 'auto' }
   });
 
@@ -185,7 +215,7 @@ export const MotionCategoryWrapper: React.FC<ICategoryWrapperProps> = React.memo
       variants={ variants.current }
       transition={ transition.current }
       style={{ originX: 0.5, originY: 0 }}
-      initial={ isCollapseVez ? 'collapse' : 'expand' }
+      initial={ 'collapse' }
       animate={ isCollapseVez ? 'collapse' : 'expand' }
     >
       { children }

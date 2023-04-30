@@ -12,5 +12,5 @@ export const enhancementKernelInfo: TKernelInfo[] = [
       
         ],
         dataList: enhancementKernelData.filter(data => data.id === 'unsharpMasking')!
-    },
+    }
 ]

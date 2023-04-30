@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useLayoutEffect } from 'react';
 import { 
   Transition,
   Variants 
@@ -58,21 +58,21 @@ interface ILabelWrapperProps {
 export const MotionLabelWrapper: React.FC<ILabelWrapperProps> = React.memo(( props ) => {
   const { children, isCollapseHoz, maxLength } = props
   const labelRef = useRef<any>(null);
-  const fontSize = useRef<any>(null);
+  const [ fontSize, setFontSize ] = useState<number>(0);
 
   const transition = useRef<Transition>({});
 
   const variants = useMemo<Variants>(() => ({
     collapse: { opacity: 0, scaleX: 0, width: 0, height: 0 },
-    expand: { opacity: 1, scaleX: 1, width: maxLength * fontSize.current/2+10, height: 'auto' }
-  }), [maxLength, fontSize.current]);
+    expand: { opacity: 1, scaleX: 1, width: maxLength * fontSize/2+10, height: 'auto' }
+  }), [maxLength, fontSize]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (labelRef.current) {
-      fontSize.current = parseFloat(window.getComputedStyle(labelRef.current).getPropertyValue("font-size"));
+      setFontSize(parseFloat(window.getComputedStyle(labelRef.current).getPropertyValue("font-size")));
     }
-  }, []);
-  
+  }, [labelRef.current]);
+
   return (
     <StyledLabelWrapper
       ref={labelRef}
@@ -106,7 +106,7 @@ export const MotionCountWrapper: React.FC<ICountWrapperProps> = React.memo(( pro
       variants={ variants.current }
       transition={ transition.current }
       style={{ originX: 0, originY: 0.5 }}
-      initial={ isCollapseHoz ? "collapse" : "expand" }
+      initial={ "collapse" }
       animate={ isCollapseHoz ? "collapse" : "expand" }
     >
       { children }

@@ -10,4 +10,5 @@ declare interface Math {
   indices1DOutsideCenter(w: number, h: number): number[];
   indices2DOutsideCenter(w: number, h: number): number[][];
   getIndicesByDistance(n: number, x: number, y: number, diagonal: boolean): number[]
+  maxOfMatrix(matrix: number[][]): number
 }
