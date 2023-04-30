@@ -1,5 +1,5 @@
 import { useSpring, animated } from "@react-spring/three"
-import { useCallback, useEffect, useMemo, useRef, useTransition } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useTransition } from "react"
 import { Float, MeshTransmissionMaterial, Text } from '@react-three/drei'
 import { useThree  } from '@react-three/fiber'
 import * as THREE from 'three'
@@ -17,22 +17,21 @@ interface Props {
   valMax: number
 }
 
-export const KernelBlock = (props: Props) => {
+export const KernelBlock = React.memo((props: Props) => {
 
   const { args, index, value, valMax } = props
 
-  const { randIndicesAnim } = useRecoilValue(selectedSizeSelector)
   const [isPending, startTransition] = useTransition();
+  const { randIndicesAnim } = useRecoilValue(selectedSizeSelector)
 
   const [boxSpring, boxApi] = useSpring(
     () => ({ "scale": 0.2, config: { mass: 2, friction: 10 } }),
     []
   )
-  const { width } = useThree((state) => state.viewport)
 
   const animInto = useCallback(() => {
     boxApi.start({ 'scale': 1, delay: randIndicesAnim.indexOf(index)*20 })
-  }, [])
+  }, [index])
 
   const animHover = useCallback(() => {
     startTransition(() => {
@@ -63,10 +62,8 @@ export const KernelBlock = (props: Props) => {
 
   return (
     <animated.group
-      // onClick={() => (console.log('click'))}
-      onPointerMove={animHover}
-      onPointerLeave={animLeave}
-      // castShadow
+      onPointerMove={ animHover }
+      onPointerLeave={ animLeave }
       { ...args }
       { ...boxSpring }>
       <Text
@@ -81,13 +78,9 @@ export const KernelBlock = (props: Props) => {
         {props.value}
       </Text>
       <mesh
-      //  castShadow
-      geometry={geometry.current}
-      material={material}
-      >
-        {/* <boxGeometry args={[0.9, 0.9, 0.9]} />
-        <meshStandardMaterial metalness={0} roughness={1} transparent={true} opacity={1} /> */}
-      </mesh>
+        geometry={geometry.current}
+        material={material}
+      />
     </animated.group>
   )
-}
+})

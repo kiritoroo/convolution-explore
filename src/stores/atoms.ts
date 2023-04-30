@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { TKernelCategory, TKernelData, TKernelInfo } from "@type/index";
+import * as THREE from 'three'
 
 export const isLoadingState = atom({
   key: 'isLoadingState',
@@ -25,7 +26,6 @@ export const selectedCategoryState = atom<TKernelCategory | null>(({
   key: 'selectedCategoryState',
   default: null
 }))
-
 
 export const selectedSizeState = atom<number | undefined>(({
   key: 'selectedSizeState',
@@ -55,4 +55,19 @@ export const isFocusKernelInfoState = atom<boolean>(({
 export const isRenderSceneState = atom<boolean>(({
   key: 'isRenderSceneState',
   default: true
+}))
+
+export const resourcesState = atom<Record<string, THREE.Texture>>(({
+  key: 'resourcesState',
+  default: {}
+}))
+
+export const isLoadingResourcesState = atom<boolean>(({
+  key: 'isLoadingResourcesState',
+  default: true
+}))
+
+export const selectedImageTextureState = atom<THREE.Texture | null>(({
+  key: 'selectedImageTextureState',
+  default: null
 }))

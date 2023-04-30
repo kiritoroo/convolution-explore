@@ -44,6 +44,7 @@ export const StyledKernelListWrapper = styled(motion.div)`
   max-height: 70vh;
   margin: 10px 0;
   overflow: hidden auto;
+  scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
     width: 8px;

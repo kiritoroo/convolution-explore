@@ -2,9 +2,11 @@ import {
   kernelCategoryDataState,
   selectedCategoryState,
   selectedSizeState,
-  selectedKernelState
+  selectedKernelState,
+  selectedImageTextureState
 } from '@store/atoms'
-import { TKernelCategory, TKernelData, TKernelInfo } from "@type/index"
+import { TColor, TColorAlpha, TKernelCategory, TKernelData, TKernelInfo } from "@type/index";
+import * as ImageUtils from '@util/ImageUtils'
 import { selector } from 'recoil'
 
 interface TData {
@@ -243,3 +245,150 @@ export const selectedKernelSelector = selector({
     }
   }
 })
+
+export const selectedImageTextureSelector = selector(({
+  key: 'selectedImageTextureSelector',
+  get: ({get}) => {
+    const texture: THREE.Texture | null = get(selectedImageTextureState)
+    const data: ImageData | null = texture ? ImageUtils.getDataTexture(texture.image) : null
+    const w: number = data?.width ?? 0
+    const h: number = data?.height ?? 0
+    const pixelCount: number = w * h
+    const rgba1d: Uint8ClampedArray = data?.data ?? new Uint8ClampedArray(pixelCount*4)
+    const rgba2d: TColorAlpha[][] = []
+    const rgb1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount*3)
+    const rgb2d: TColor[][] = []
+    const cRed1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount);
+    const cRed2d: number[][] = []
+    const cGreen1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount);
+    const cGreen2d: number[][] = []
+    const cBlue1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount);
+    const cBlue2d: number[][] = []
+    const gray1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount);
+    const gray2d: number[][] = []
+
+    for (let y = 0; y < h; y++) {
+      const _rowRgba: TColorAlpha[] = []
+      const _rowRgb: TColor[] = []
+      const _rowRed: number[] = []
+      const _rowGreen: number[] = []
+      const _rowBlue: number[] = []
+      const _rowGray: number[] = []
+
+      for (let x = 0; x < w; x++) {
+        const index1d = (y * w + x)
+        const _r = rgba1d[index1d * 4];
+        const _g = rgba1d[index1d * 4 + 1];
+        const _b = rgba1d[index1d * 4 + 2];
+        const _a = rgba1d[index1d * 4 + 3];
+        const _gray = ImageUtils.rgb2Gray(_r, _g, _b);
+        
+        rgba1d[index1d * 3] = _r;
+        rgba1d[index1d * 3 + 1] = _g;
+        rgba1d[index1d * 3 + 2] = _b;
+        cRed1d[index1d] = _r;
+        cGreen1d[index1d] = _g;
+        cBlue1d[index1d] = _b;
+        gray1d[index1d] = _gray;
+
+        _rowRgba.push({ r: _r, g: _g, b: _b, a: _a })
+        _rowRgb.push({ r: _r, g: _g, b: _b })
+        _rowRed.push(_r)
+        _rowGreen.push(_g)
+        _rowBlue.push(_b)
+        _rowGray.push(_gray)
+      }
+      rgba2d.push(_rowRgba)
+      rgb2d.push(_rowRgb)
+      cRed2d.push(_rowRed)
+      cGreen2d.push(_rowGreen)
+      cBlue2d.push(_rowBlue)
+      gray2d.push(_rowGray)
+    }
+
+    return {
+      texture,
+      data,
+      w, h,
+      pixelCount,
+      rgba1d, rgba2d,
+      rgb1d, rgb2d,
+      cRed1d, cRed2d,
+      cGreen1d, cGreen2d,
+      cBlue1d, cBlue2d,
+      gray1d, gray2d
+    }
+  }
+}))
+
+export const selectedImageOutputSelector = selector(({
+  key: 'selectedImageOutputSelector',
+  get: ({get}) => {
+    const kernel = get(selectedKernelSelector)
+    const imageIn = get(selectedImageTextureSelector)
+    const kernelSize = kernel.data?.size ?? 0
+    const w = imageIn.w
+    const h = imageIn.h
+    const pixelCount = imageIn.pixelCount
+    const rgb1dOut: TColor[] = Array(pixelCount).fill({ r: 255, g: 255, b:255 });
+    const rgb2dOut: TColor[][] = Array.from({length: h}, () => Array(w).fill({ r: 255, g: 255, b:255 }));
+    const gray1dOut: Uint8ClampedArray = new Uint8ClampedArray(imageIn.pixelCount)
+    const gray2dOut: number[][] = Array.from({length: h}, () => Array(w).fill(255));
+
+    if (imageIn.data) {
+      for (let y = 0; y < imageIn.h - (kernelSize - 1); y++) {
+        for (let x = 0; x < imageIn.h - (kernelSize - 1); x++) {
+          
+          const windowSliceInRed: number[] = [];
+          const windowSliceInGreen: number[] = [];
+          const windowSliceInBlue: number[] = [];
+
+          for (let ky = 0; ky < kernelSize ?? 1; ky++) {
+            for (let kx = 0; kx < kernelSize ?? 1; kx++) {
+              const index = (y + ky) * imageIn.w + (x + kx);
+              windowSliceInRed.push(imageIn.cRed1d[index])
+              windowSliceInGreen.push(imageIn.cGreen1d[index])
+              windowSliceInBlue.push(imageIn.cBlue1d[index])
+            }
+          }
+
+          const windowSliceOutColor: TColor = {
+            r: Math
+            .mularr(windowSliceInRed, kernel.matrixCoef1D)
+            .reduce((acc, value) => acc + value, 0),
+            g: Math
+              .mularr(windowSliceInGreen, kernel.matrixCoef1D)
+              .reduce((acc, value) => acc + value, 0),
+            b: Math
+              .mularr(windowSliceInBlue, kernel.matrixCoef1D)
+              .reduce((acc, value) => acc + value, 0),
+          }
+
+          const windowSliceOutGray: number = ImageUtils.rgb2Gray(
+            windowSliceOutColor.r,
+            windowSliceOutColor.g,
+            windowSliceOutColor.b,
+          )
+
+          const indexOut2D = {
+            x: x + Math.floor(kernelSize/2),
+            y: y + Math.floor(kernelSize/2)
+          }
+
+          const indexOut1D = indexOut2D.x * imageIn.w + indexOut2D.y;
+
+          rgb1dOut[indexOut1D] = windowSliceOutColor;
+          rgb2dOut[indexOut2D.y][indexOut2D.x] = windowSliceOutColor;
+          gray1dOut[indexOut1D] = windowSliceOutGray;
+          gray2dOut[indexOut2D.y][indexOut2D.x] = windowSliceOutGray;
+        }
+      }
+    }
+
+    return{
+      w, h, pixelCount,
+      rgb1dOut, rgb2dOut,
+      gray1dOut, gray2dOut
+    }
+  }
+}))

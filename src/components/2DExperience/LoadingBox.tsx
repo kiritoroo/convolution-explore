@@ -1,26 +1,15 @@
 import React from "react"
 import * as S from '@style2d/LoadingBox.styled';
-
+import * as M from '@motion2d/LoadingBox.motion';
 interface Props {
 
 }
 
 export const LoadingBox = ( props: Props ) => {
 
-  const trans = { duration: 1, ease: "easeInOut" };
-  const variants = {
-    hidden: { opacity: 1 },
-    enter: { opacity: 1, transition: trans },
-    exit: { opacity: 0, transition: trans }
-  };
-
   return (
     <React.Fragment>
-      <S.StyledContainer
-        initial="hidden"
-        animate="enter"
-        exit="exit"
-        variants={variants}>
+      <M.MotionContainer>
         <S.StyledCubeWrapper>
           <S.StyledCubeFront/>
           <S.StyledCubeBack/>
@@ -31,7 +20,7 @@ export const LoadingBox = ( props: Props ) => {
         </S.StyledCubeWrapper>
         <S.StyledHint>
         </S.StyledHint>
-      </S.StyledContainer>
+      </M.MotionContainer>
     </React.Fragment>
   )
 }

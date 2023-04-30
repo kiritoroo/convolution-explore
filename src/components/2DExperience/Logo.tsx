@@ -1,10 +1,11 @@
-import React from "react"
-import * as S from '@style2d/Logo.styled';
+import React, { useMemo } from "react"
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useRef, useEffect, useCallback } from 'react';
 import { Variant, useAnimation, useInView } from "framer-motion";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { cursorVariantState, isLoadingState } from "@store/atoms";
+import * as S from '@style2d/Logo.styled';
+import * as M from '@motion2d/Logo.motion';
 
 interface Props {
 
@@ -15,49 +16,15 @@ export const Logo = ( props: Props ) => {
 
   const text = useRef<string>('Convolution')
 
-  const ctrls = useAnimation();
-  
-  const ref = useRef<any>(null)
-
-  const isInView = useInView(ref, { once: true })
-
+  const animCtrl = useAnimation();
   const navigate = useNavigate();
-
   const location = useLocation();
 
   const handleLogoClick = useCallback(() => {
-    if (location.pathname === '/') {
-      return;
-    }
-    
+    if (location.pathname === '/') return;
     setIsLoading(true)
     navigate('/');
   }, []);
-
-  useEffect(() => {
-    if (!isLoading) {
-      ctrls.start("visible");
-    }
-    if (isLoading) {
-      ctrls.start("hidden");
-    }
-  }, [isLoading]);
-
-  const wordAnimation = {
-    hidden: {},
-    visible: {},
-  };
-  
-  const characterAnimation = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      y: -5
-    },
-  };
 
   const setCursorVariant = useSetRecoilState(cursorVariantState);
   
@@ -69,40 +36,46 @@ export const Logo = ( props: Props ) => {
     setCursorVariant("default")
   }, [])
 
+  const handleLoading = useCallback((isLoading: boolean) => {
+    if (!isLoading) {
+      animCtrl.start("visible");
+    }
+    if (isLoading) {
+      animCtrl.start("hidden");
+    }
+  }, [])
+
+  useEffect(() => {
+    handleLoading(isLoading);
+  }, [isLoading]);
+
+  const createCharacters = useCallback((content: string) => {
+    return text.current.split(" ").map((word, index) => (
+      <M.MotionWord
+        key={ index }
+        animCtrl={ animCtrl }
+        index={ index }>
+        {word.split("").map((character, index) => (
+          <M.MotionCharacter
+            key={ index }>
+            { character }
+          </M.MotionCharacter>
+        ))}
+      </M.MotionWord>
+    ))
+  }, [])
+
+  const renderedCharacters = useMemo<JSX.Element[]>(() => {
+    return createCharacters(text.current);
+  }, [text.current])
+
   return (
     <React.Fragment>
       <S.StyledContainer  
         onMouseEnter={ handleMouseEnter }
         onMouseLeave={ handleMouseLeave }
         onClick={handleLogoClick}>
-        {text.current.split(" ").map((word, index) => {
-          return (
-            <S.StyledWord
-              ref={ref}
-              key={index}
-              initial="hidden"
-              animate={ctrls}
-              variants={wordAnimation}
-              transition={{
-                type: 'spring',
-                eae: 'easeIn',
-                delayChildren: index * 0.25,
-                staggerChildren: 0.1
-              }}
-            >
-              {word.split("").map((character, index) => {
-                return (
-                  <S.StyledCharacter
-                    key={index}
-                    variants={characterAnimation}
-                  >
-                    {character}
-                  </S.StyledCharacter>
-                );
-              })}
-            </S.StyledWord>
-          );
-        })}
+        { renderedCharacters }
       </S.StyledContainer>
     </React.Fragment>
   )

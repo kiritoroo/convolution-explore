@@ -3,9 +3,9 @@ import * as S from '@style/3DExperience/ShowcaseCanvas.styled'
 import { OrbitControls } from "@react-three/drei"
 import { Background } from "../core/Background"
 import { Env } from "../core/Env"
-import { isLoadingState, isRenderSceneState, selectedKernelState, selectedSizeState } from "@store/atoms"
+import { isLoadingState, isRenderSceneState, resourcesState, selectedImageTextureState, selectedKernelState, selectedSizeState } from "@store/atoms"
 import { useRecoilValue, useSetRecoilState } from "recoil"
-import { useCallback, useLayoutEffect } from "react"
+import { useCallback, useEffect, useLayoutEffect, useTransition } from "react"
 import { Ground } from "./Ground"
 import { KernelMatrix } from "./KernelMatrix"
 import { kernelCategoryDataSelector } from "@store/selectors"
@@ -21,16 +21,33 @@ export const ShowcaseCanvas = ( props: Props) => {
   const setSelectedKernel = useSetRecoilState(selectedKernelState);
   const setSelectedSize = useSetRecoilState(selectedSizeState);
   const isRenderScene = useRecoilValue(isRenderSceneState);
+  const assetsResouces = useRecoilValue(resourcesState);
+  const setSelectedImageTexture = useSetRecoilState(selectedImageTextureState);
+  const [isPending, startTransition] = useTransition();
 
   useLayoutEffect(() => {
     if (dataListByCategory["filtering"]) {
-      setSelectedKernel((prevItem) => prevItem ? prevItem : {
-        info: dataListByCategory["filtering"][0].info,
-        data: dataListByCategory["filtering"][0].data
+      // setSelectedKernel((prevItem) => prevItem ? prevItem : {
+      //   info: dataListByCategory["filtering"][0].info,
+      //   data: dataListByCategory["filtering"][0].data
+      // })
+      startTransition(() => {
+        setSelectedKernel({
+          info: dataListByCategory["filtering"][0].info,
+          data: dataListByCategory["filtering"][0].data
+        })
+        setSelectedSize(dataListByCategory["filtering"][0].data.size)
       })
-      setSelectedSize(dataListByCategory["filtering"][0].data.size)
     }
   }, [dataListByCategory])
+
+  useLayoutEffect(() => {
+    if (Object.keys(assetsResouces).length > 0) {
+      startTransition(() => {
+        setSelectedImageTexture(assetsResouces["default-7"])
+      })
+    }
+  }, [assetsResouces])
 
   const handleLoaded = useCallback(() => {
     setTimeout(() => {
@@ -40,13 +57,12 @@ export const ShowcaseCanvas = ( props: Props) => {
 
   return (
     <S.StyledContainer>
-      <Canvas frameloop={ isRenderScene ? "always" : "never" } dpr={[1, 2]} camera={{ position: camPosInDefault, fov: 22 }}>
+      <Canvas legacy={true} frameloop={ isRenderScene ? "always" : "never" } dpr={[1, 2]} camera={{ position: camPosInDefault, fov: 22 }}>
       <group onUpdate={ handleLoaded }>
 
         <color attach="background" args={['#f0f0f0']} />
-        <hemisphereLight intensity={0.15} groundColor="black" />
-        <spotLight position={[10, 20, 10]} angle={0.12} penumbra={1} intensity={1} castShadow shadow-mapSize={1024} />
-        <pointLight distance={5} intensity={1} position={[-0.15, 0.7, 0]} color="#C5ABFB" />
+        <hemisphereLight intensity={0.2} groundColor="#D0C0F7" />
+        <spotLight position={[0, 20, 0]} angle={0.1} penumbra={1} intensity={0.5} castShadow shadow-mapSize={1024} />
         
         <Selector>
           <KernelMatrix/>
@@ -54,7 +70,6 @@ export const ShowcaseCanvas = ( props: Props) => {
 
         <Ground/>
         <Env/>
-        {/* <Background/> */}
         
         <OrbitControls enableDamping={true}/>
       </group>

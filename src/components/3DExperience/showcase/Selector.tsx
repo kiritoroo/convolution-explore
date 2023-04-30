@@ -31,8 +31,8 @@ export const Selector = (props: Props) => {
     ref.current.lookAt(ref.current.position.clone().sub(direction));
     ref.current.position.set(2+selecterKernel.data!.size/2, 2+selecterKernel.data!.size/2, 2+selecterKernel.data!.size/2)
 
-    easing.damp3(ref.current.scale, isFocusKernelInfo ? 4 : 0, isFocusKernelInfo ? 0.5 : 0.2, 1/32)
-    easing.dampC(ref.current.material.color, isFocusKernelInfo ? '#fcf4ff' : '#ffffff', 0.1, 1/32)
+    easing.damp3(ref.current.scale, isFocusKernelInfo ? 4 : 0, isFocusKernelInfo ? 0.5 : 0.5, 1/delta)
+    easing.dampC(ref.current.material.color, isFocusKernelInfo ? '#fcf4ff' : '#ffffff', 0.2, 1/delta)
   })
 
   useEffect(() => {
@@ -80,15 +80,20 @@ export const Selector = (props: Props) => {
   }, [])
 
   return (
-    <group
-      onClick={() => {}}>
+    <group>
+      <group
+        onPointerEnter={ handleMouseEnter }
+        onPointerLeave={ handleMouseLeave }
+        onClick={ handleOnSelect }>
+        {props.children}
+      </group>
       <mesh ref={ref}
         scale={0}
         onClick={ handleOnUnSelect }>
-        <circleGeometry args={[5, 64, 64]} />
+        <circleGeometry args={[5, 32, 32]} />
         <MeshTransmissionMaterial
-          samples={16}
-          resolution={512}
+          samples={15}
+          resolution={1024}
           transmission={1}
           thickness={0.1}
           chromaticAberration={5}
@@ -100,12 +105,6 @@ export const Selector = (props: Props) => {
           ior={0.83}
           toneMapped={true} />
       </mesh>
-      <group
-        onPointerEnter={ handleMouseEnter }
-        onPointerLeave={ handleMouseLeave }
-        onClick={ handleOnSelect }>
-        {props.children}
-      </group>
     </group>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from "react"
-import { selectedSizeState } from "@store/atoms";
+import { resourcesState, selectedImageTextureState, selectedSizeState } from "@store/atoms";
 import { selectedCategorySelector } from "@store/selectors";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
 import { KernelListItem } from "@comp2d/KernelListItem";
 import * as S from '@style2d/KernelList.styled';
 import * as M from '@motion2d/KernelList.motion';
@@ -17,6 +17,8 @@ export const KernelList = React.memo(( props: Props ) => {
   const { sizeList: lastSizeList, dataListBySizeObj: lastDataListBySizeObj } = lastSelectedCategory
 
   const [selectedSize, setSelectedSize] = useRecoilState(selectedSizeState)
+  const setSelectedImageTexture = useSetRecoilState(selectedImageTextureState);
+  const assetsResouces = useRecoilValue(resourcesState);
 
   const [isPending, startTransition] = useTransition();
 
@@ -25,7 +27,7 @@ export const KernelList = React.memo(( props: Props ) => {
       startTransition(() => {
         setLastSelectedCategory(selectedCategory)
         setSelectedSize(selectedCategory.sizeList[0] ?? undefined)
-      });
+      })
     }
   }, [selectedCategory]);
 
@@ -33,6 +35,9 @@ export const KernelList = React.memo(( props: Props ) => {
     startTransition(() => {
       setSelectedSize(size);
     });
+    // startTransition(() => {
+    //   setSelectedImageTexture(assetsResouces[`default-${size}`])
+    // });
   }, []);
 
   useEffect(() => {
