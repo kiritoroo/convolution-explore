@@ -69,9 +69,9 @@ export const MotionInfoWrapper: React.FC<IInfoWrapperProps> = React.memo(( props
  
   const handleAnimateCollapseVisual = useCallback((isCollapse: boolean) => {
     if (isCollapse) {
-      animate(scope.current, { width: 600 }, { duration: 0.3 })
+      animate(scope.current, { width: 800 }, { duration: 0.3 })
     } else {
-      animate(scope.current, { width: 300 }, { duration: 0.3 })
+      animate(scope.current, { width: 400 }, { duration: 0.3 })
     }
   }, [])
 
@@ -167,9 +167,9 @@ export const MotionInfoDescription: React.FC<IInfoDescriptionProps> = React.memo
 
   const handleAnimateCollapseVez = useCallback((isCollapse: boolean) => {
     if (isCollapse) {
-      animate(scope.current, { width: 600, fontSize: '1em' }, { duration: 0.3 })
+      animate(scope.current, { fontSize: '1em' }, { duration: 0.4 })
     } else {
-      animate(scope.current, { width: 300, fontSize: '0.75em' }, { duration: 0.3 })
+      animate(scope.current, { fontSize: '0.5em' }, { duration: 0.3 })
     }
   }, [])
 
@@ -183,7 +183,7 @@ export const MotionInfoDescription: React.FC<IInfoDescriptionProps> = React.memo
       variants={ variants.current }
       transition={ transition.current }
     >
-      { children }
+      { isCollapse ? children : null }
     </StyledInfoDescription>
   )
 })
@@ -209,9 +209,9 @@ export const MotionMatrixWrapper: React.FC<IMatrixWrapperPorps> = React.memo(( p
 
   const handleAnimateCollapseVez = useCallback((isCollapse: boolean) => {
     if (isCollapse) {
-      animate(scope.current, { width: 600, scale: 1, margin: 20 }, { duration: 0.3 })
+      animate(scope.current, { scale: 1, margin: 5 }, { duration: 0.4 })
     } else {
-      animate(scope.current, { width: 300, scale: 0.8, margin: 0 }, { duration: 0.3 })
+      animate(scope.current, { scale: 0.8, margin: 0 }, { duration: 0.3 })
     }
   }, [])
 
