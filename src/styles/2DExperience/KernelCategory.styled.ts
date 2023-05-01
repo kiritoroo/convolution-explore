@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 export const StyledContainer = styled(motion.div)`
   position: absolute;
   top: 12%;
-  left: 5%;
+  left: 2%;
   width: auto;
   height: auto;
   padding: 10px 15px 10px 15px;
@@ -92,4 +92,3 @@ export const StyledBoudingRectCollapseHoz = styled.div`
   justify-content: center;
   height: 100%;
 `
-

@@ -21,6 +21,7 @@ interface VisualOutputRefs {
 
 interface VisualProcessRefs {
   divRects1d: HTMLDivElement[]
+  divOut: React.RefObject<HTMLDivElement>
 }
 
 export const VisualControls = React.memo((props: Props) => {
@@ -29,7 +30,7 @@ export const VisualControls = React.memo((props: Props) => {
   const kernel = useRecoilValue(selectedKernelSelector);  
   const imageIn = useRecoilValue(selectedImageInputSelector);
   const imageOut = useRecoilValue(selectedImageOutputSelector);
-  const pixelSize = imageIn.w == 32 ? 8 : imageIn.w == 48 ? 5 : 4;
+  const pixelSize = Math.round(240/imageOut.w)
 
   const visualInputRef = useRef<VisualInputRefs>(null);
   const visualOutputRef = useRef<VisualOutputRefs>(null);
@@ -41,6 +42,10 @@ export const VisualControls = React.memo((props: Props) => {
   const windowSliceInColorGreen = useRef<number[]>([]);
   const windowSliceInColorBlue = useRef<number[]>([]);
   const windowSliceInGray = useRef<number[]>([]);
+  const windowSliceOutColorRed = useRef<number>();
+  const windowSliceOutColorGreen = useRef<number>();
+  const windowSliceOutColorBlue = useRef<number>();
+  const windowSliceOutGray = useRef<number>();
 
   const clearWindowInSlice = () => {
     windowSliceInRect.current.forEach((rect: SVGRectElement) => {
@@ -75,6 +80,11 @@ export const VisualControls = React.memo((props: Props) => {
 
   const setWindowOutSlice = useCallback((x: number, y: number) => {
     windowSliceOutRect.current = undefined;
+    windowSliceOutColorRed.current = undefined;
+    windowSliceOutColorGreen.current = undefined;
+    windowSliceOutColorBlue.current = undefined;
+    windowSliceOutGray.current = undefined;
+
     const indexOut2d = {
       x: x + Math.floor(kernel.data!.size/2),
       y: y + Math.floor(kernel.data!.size/2)
@@ -82,6 +92,11 @@ export const VisualControls = React.memo((props: Props) => {
     const indexOut1d = indexOut2d.y * imageOut.w + indexOut2d.x
     windowSliceOutRect.current = visualOutputRef.current?.svgRects1d[indexOut1d] as SVGRectElement;
     windowSliceOutRect.current.classList.add("bounding");
+
+    windowSliceOutColorRed.current = imageOut.rgb1dOut[indexOut1d].r;
+    windowSliceOutColorGreen.current = imageOut.rgb1dOut[indexOut1d].g;
+    windowSliceOutColorBlue.current = imageOut.rgb1dOut[indexOut1d].b;
+    windowSliceOutGray.current = imageOut.gray1dOut[indexOut1d];
   }, [kernel.data, imageOut, visualOutputRef.current])
 
   const setProcess = useCallback(() => {
@@ -91,6 +106,12 @@ export const VisualControls = React.memo((props: Props) => {
         ${windowSliceInColorGreen.current[i]},
         ${windowSliceInColorBlue.current[i]})`
     })
+    if (visualProcessRef.current?.divOut.current) {
+      visualProcessRef.current.divOut.current.style.background = `rgb(
+        ${windowSliceOutColorRed.current},
+        ${windowSliceOutColorGreen.current},
+        ${windowSliceOutColorBlue.current})`;
+    }
   }, [visualProcessRef.current])
 
   const handleRaycaster = useCallback((event: MouseEvent) => {
@@ -118,7 +139,7 @@ export const VisualControls = React.memo((props: Props) => {
       setWindowOutSlice(indexX, indexY);
       setProcess();
     }) 
-  }, [imageIn, kernel.data])
+  }, [imageIn, imageOut, kernel.data])
 
   const handleUnRaycaster = useCallback(() => {
     startTransition(() => {
@@ -128,7 +149,7 @@ export const VisualControls = React.memo((props: Props) => {
       setWindowOutSlice(0, 0);
       setProcess();
     }) 
-  }, [kernel.data])
+  }, [imageIn, imageOut, kernel.data])
 
   useEffect(() => {
     if (visualInputRef) {

@@ -9,12 +9,14 @@ interface Props {
 
 interface Refs {
   divRects1d: HTMLDivElement[]
+  divOut:React.RefObject<HTMLDivElement>
 }
 
 export const VisualProcess = React.memo(React.forwardRef<Refs, Props>(( props, ref ) => {
   const kernel = useRecoilValue(selectedKernelSelector);
 
   const matrixRef = useRef<HTMLDivElement>(null)
+  const outValueRef = useRef<HTMLDivElement>(null)
 
   useImperativeHandle(ref, () => {
     return {
@@ -22,9 +24,10 @@ export const VisualProcess = React.memo(React.forwardRef<Refs, Props>(( props, r
         return Array.from(rowNodes.childNodes).map((itemNodes) => {
           return itemNodes.childNodes[0] as HTMLDivElement
         })
-      })
+      }),
+      divOut: outValueRef
     }
-  }, [matrixRef.current, kernel])
+  }, [matrixRef.current, kernel, outValueRef.current])
 
   return (
     <S.StyledContainer>
@@ -45,6 +48,10 @@ export const VisualProcess = React.memo(React.forwardRef<Refs, Props>(( props, r
         ))}
         </S.StyledFlexMatrixVez>
       </S.StyledMatrixWrapper>
+
+      <S.StyledOutputWrapper>
+        <S.StyledOutput ref={ outValueRef }/>
+      </S.StyledOutputWrapper>
     </S.StyledContainer>
   )
 }))

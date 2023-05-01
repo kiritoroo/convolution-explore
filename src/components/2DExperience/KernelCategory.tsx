@@ -4,7 +4,8 @@ import {
   isCollapseHozKernelCategoryState,
   selectedCategoryState,
   isFocusKernelInfoState,
-  isRenderSceneState
+  isRenderSceneState,
+  cursorVariantState
 } from '@store/atoms'
 import {
   kernelCategoryDataSelector
@@ -26,7 +27,8 @@ export const KernelCategory = React.memo((props: IProps) => {
   const [ isCollapseHoz, setIsCollapseHoz ] = useRecoilState(isCollapseHozKernelCategoryState);
   const [isFocusKernelInfo, setIsFocusKernelInfo] = useRecoilState(isFocusKernelInfoState)
   const setIsRenderScene = useSetRecoilState(isRenderSceneState);
-  
+  const setCursorVariant = useSetRecoilState(cursorVariantState);
+
   const handleButtonCollapseVezClick = useCallback(() => {
     setIsRenderScene(true)
     setIsCollapseVez((prevState) => !prevState);
@@ -49,6 +51,14 @@ export const KernelCategory = React.memo((props: IProps) => {
     setSelectedCategory(null);
   }, []);
 
+  const handleMouseEnter = useCallback(() => {
+    setCursorVariant("hoveroption")
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setCursorVariant("default")
+  }, [])
+
   useEffect(() => {
     handleCollapseVez()
   }, [isCollapseVez])
@@ -69,32 +79,32 @@ export const KernelCategory = React.memo((props: IProps) => {
   }, [categoryList, isCollapseVez])
 
   return (
-    <React.Fragment>
-      <M.MotionContainer>
-        <M.MotionButtonCollapseVez 
+    <M.MotionContainer
+      onMouseEnter={ handleMouseEnter }
+      onMouseLeave={ handleMouseLeave }>
+      <M.MotionButtonCollapseVez 
+        isCollapseVez={isCollapseVez}
+        onClick={handleButtonCollapseVezClick}>
+        <M.MotionIconCollapseVez 
+          isCollapseVez={isCollapseVez}/>
+      </M.MotionButtonCollapseVez>
+
+      <S.StyledBoudingRectCollapseHoz
+        onMouseMove={handleBoudingRectCollapseHozMouseMove}
+        onMouseLeave={handleBoudingRectCollapseHozMouseLeave}>
+        <M.MotionButtonCollapseHoz
           isCollapseVez={isCollapseVez}
-          onClick={handleButtonCollapseVezClick}>
-          <M.MotionIconCollapseVez 
-            isCollapseVez={isCollapseVez}/>
-        </M.MotionButtonCollapseVez>
+          isCollapseHoz={isCollapseHoz}
+          isShowButtonCollapseHoz={isShowButtonCollapseHoz}
+          onClick={handleButtonCollapseHozClick}>
+          <M.MotionIconCollapseHoz
+            isCollapseHoz={isCollapseHoz}/>
+        </M.MotionButtonCollapseHoz>
+      </S.StyledBoudingRectCollapseHoz>
 
-        <S.StyledBoudingRectCollapseHoz
-          onMouseMove={handleBoudingRectCollapseHozMouseMove}
-          onMouseLeave={handleBoudingRectCollapseHozMouseLeave}>
-          <M.MotionButtonCollapseHoz
-            isCollapseVez={isCollapseVez}
-            isCollapseHoz={isCollapseHoz}
-            isShowButtonCollapseHoz={isShowButtonCollapseHoz}
-            onClick={handleButtonCollapseHozClick}>
-            <M.MotionIconCollapseHoz
-              isCollapseHoz={isCollapseHoz}/>
-          </M.MotionButtonCollapseHoz>
-        </S.StyledBoudingRectCollapseHoz>
+      { renderedCategoryListItem }
 
-        { renderedCategoryListItem }
-
-        <KernelList/>
-      </M.MotionContainer>
-    </React.Fragment>
+      <KernelList/>
+    </M.MotionContainer>
   )
 })

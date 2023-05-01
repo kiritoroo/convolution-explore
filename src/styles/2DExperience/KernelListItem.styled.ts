@@ -18,6 +18,10 @@ export const StyledMatrixWrapper = styled(motion.div)`
   padding: 25px 50px;
   border-radius: 5px;
   background: linear-gradient(to bottom, rgb(255, 255, 255, 0.2) 0%, rgb(255, 255, 255, 0.5) 100%);
+  
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 export const StyledFlexMatrixVez = styled.div`

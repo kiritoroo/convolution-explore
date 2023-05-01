@@ -54,3 +54,16 @@ export const StyledInputValue = styled.div`
   height: 30px;
   background: #DEDDF1;
 `
+
+export const StyledOutputWrapper = styled.div`
+margin-top: 10px;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, rgb(255, 255, 255, 0.2) 0%, rgb(255, 255, 255, 0.5) 100%);
+`
+
+export const StyledOutput = styled.div`
+  width: 40px;
+  height: 40px;
+  background: #DEDDF1;
+`

@@ -10,6 +10,7 @@ import { LoadingBox } from '@comp/2DExperience/LoadingBox';
 import { isLoadingState } from '@store/atoms';
 import { AnimatePresence } from 'framer-motion';
 import { KernelInfo } from '@comp/2DExperience/KernelInfo';
+import { OptionsList } from '@comp/2DExperience/OptionsList';
 
 interface Props {
 
@@ -46,6 +47,7 @@ export default function ShowcasePage( props: Props ) {
         { !isLoading && <KernelInfo/> }
       </AnimatePresence>
       { !isLoading && <KernelCategory/> }
+      { !isLoading && <OptionsList/> }
       {/* <KernelCardList/> */}
       { !isLoading &&  <Navbar/> }
     </React.Fragment>

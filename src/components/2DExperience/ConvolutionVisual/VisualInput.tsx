@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef } f
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import * as S from '@style/2DExperience/ConvolutionVisual/VisualInput.styled';
 import { TColor } from "@type/index";
-import { cursorVariantState } from "@store/atoms";
+import { cursorVariantState, selectedImageInfoState } from "@store/atoms";
 
 interface Props {
 
@@ -16,8 +16,9 @@ interface Refs {
 
 export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref ) => {
   const imageIn = useRecoilValue(selectedImageInputSelector);
-  const pixelSize = imageIn.w == 32 ? 8 : imageIn.w == 48 ? 5 : 4;
+  const pixelSize = Math.round(240/imageIn.w)
   const setCursorVariant = useSetRecoilState(cursorVariantState);
+  const selectedImageInfo = useRecoilValue(selectedImageInfoState);
 
   const svgRef = useRef<SVGSVGElement>(null)
 
@@ -57,6 +58,10 @@ export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref
             ))
           ))}
         </S.StyledImage>
+
+        <S.StyledImageInfo>
+          Art by: {selectedImageInfo.by}
+        </S.StyledImageInfo>
       </S.StyledImageWrapper>
     </S.StyledContaier>
   )

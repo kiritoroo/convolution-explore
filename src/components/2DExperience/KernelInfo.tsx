@@ -1,7 +1,7 @@
-import React, { useCallback, useTransition } from "react";
+import React, { useCallback, useMemo, useTransition } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedKernelSelector } from "@store/selectors";
-import { isCollapseVezKernelCategoryState, isFocusKernelInfoState, isRenderSceneState } from "@store/atoms";
+import { isCollapseVezKernelCategoryState, isCollapseVisualState, isFocusKernelInfoState, isRenderSceneState } from "@store/atoms";
 import * as S from '@style2d/KernelInfo.styled';
 import * as M from '@motion2d/KernelInfo.motion';
 import { VisualControls } from "./ConvolutionVisual/VisualControls";
@@ -11,11 +11,12 @@ interface Props {
 }
 
 export const KernelInfo = React.memo(( props: Props ) => {
-  const selectedKernel = useRecoilValue(selectedKernelSelector)
+  const kernel = useRecoilValue(selectedKernelSelector)
   const [isPending, startTransition] = useTransition();
-  const setIsCollapseVezKernelCategory = useSetRecoilState(isCollapseVezKernelCategoryState)
-  const [isFocusKernel, setIsFocusKernelInfo] = useRecoilState(isFocusKernelInfoState)
+  const setIsCollapseVezKernelCategory = useSetRecoilState(isCollapseVezKernelCategoryState);
+  const [isFocusKernel, setIsFocusKernelInfo] = useRecoilState(isFocusKernelInfoState);
   const setIsRenderScene = useSetRecoilState(isRenderSceneState);
+  const [isCollapseVisual, setIsCollapseVisual] = useRecoilState(isCollapseVisualState);
 
   const handleOnUnSelect = useCallback(() => {
     setIsRenderScene(true)
@@ -25,26 +26,69 @@ export const KernelInfo = React.memo(( props: Props ) => {
     })
   }, [])
 
+  const handleButtonCollapseVisualClick = useCallback(() => {
+    setIsCollapseVisual((prevState) => !prevState);
+  }, [])
+
+  const createMatrix = useCallback((matrix: number[][]) => {
+    return (
+      <S.StyledFlexMatrixVez>
+        {matrix.map((row: number[], i: number) => (
+          <S.StyledFlexMatrixHoz key={i}>
+            {row.map((value: number, j: number) => (
+              <S.StyledMatrixItem 
+                key={`${i}-${j}`}>
+                {value}
+              </S.StyledMatrixItem>
+            ))}
+          </S.StyledFlexMatrixHoz>
+        ))}
+      </S.StyledFlexMatrixVez>
+    )
+  }, []);
+  
+  const renderedMatrix = useMemo<JSX.Element>(() => {
+    return createMatrix(kernel.data!.matrix);
+  }, [kernel.data]);
+
   return (
     <React.Fragment>
       <M.MotionContainer 
-        isFocusKernel={isFocusKernel }
-        onClick={ handleOnUnSelect }>
-        <M.MotionInfoWrapper isFocusKernel={isFocusKernel}>
+        isFocusKernel={isFocusKernel }>
+        <M.MotionInfoWrapper 
+          onClick={ handleOnUnSelect }
+          isCollapse={ isCollapseVisual }
+          isFocusKernel={isFocusKernel}>
           <M.MotionInfoLabel>
-            { selectedKernel.info?.label } ({selectedKernel.data?.size}x{selectedKernel.data?.size})
+            { kernel.info?.label } ({kernel.data?.size}x{kernel.data?.size})
           </M.MotionInfoLabel>
           <M.MotionInfoCategory>
-            { selectedKernel.info?.categoryid }
+            { kernel.info?.categoryid }
           </M.MotionInfoCategory>
-          <M.MotionInfoDescription>
-            { selectedKernel.info?.description }
+          <M.MotionMatrixWrapper
+            isCollapse={ isCollapseVisual }>
+            { renderedMatrix }
+          </M.MotionMatrixWrapper>
+          <M.MotionInfoDescription
+            isCollapse={ isCollapseVisual }>
+            { kernel.info?.description }
           </M.MotionInfoDescription>
         </M.MotionInfoWrapper>
 
-        <S.StyledVisualWrapper>
+        <M.MotionVisualWrapper
+          onClick={ handleOnUnSelect }
+          isCollapse={ isCollapseVisual }>
           <VisualControls/>
-        </S.StyledVisualWrapper>
+        </M.MotionVisualWrapper>
+
+        <S.StyledBoudingRectCollapseVisualz>
+          <M.MotionButtonCollapseVisual
+            isCollapse={ isCollapseVisual }
+            onClick={ handleButtonCollapseVisualClick }>
+              <M.MotionIconCollapseVisual
+              isCollapse={ isCollapseVisual }/>
+          </M.MotionButtonCollapseVisual>
+        </S.StyledBoudingRectCollapseVisualz>
       </M.MotionContainer>
     </React.Fragment>
   )

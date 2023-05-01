@@ -29,6 +29,7 @@ export interface TKernelData {
 
 export interface TAsset {
   name: string
+  by: string
   type: 'image'
   path: string
 }

@@ -3,7 +3,7 @@ import * as S from '@style/3DExperience/ShowcaseCanvas.styled'
 import { OrbitControls } from "@react-three/drei"
 import { Background } from "../core/Background"
 import { Env } from "../core/Env"
-import { isLoadingState, isRenderSceneState, resourcesState, selectedImageTextureState, selectedKernelState, selectedSizeState } from "@store/atoms"
+import { isLoadingState, isRenderSceneState, resourcesState, selectedImageInfoState, selectedImageTextureState, selectedKernelState, selectedSizeState } from "@store/atoms"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { useCallback, useEffect, useLayoutEffect, useTransition } from "react"
 import { Ground } from "./Ground"
@@ -11,6 +11,7 @@ import { KernelMatrix } from "./KernelMatrix"
 import { kernelCategoryDataSelector } from "@store/selectors"
 import { camPosInDefault } from "./CameraControls"
 import { Selector } from "./Selector"
+import { assets } from "@asset/index"
 
 interface Props {}
 
@@ -23,6 +24,7 @@ export const ShowcaseCanvas = ( props: Props) => {
   const isRenderScene = useRecoilValue(isRenderSceneState);
   const assetsResouces = useRecoilValue(resourcesState);
   const setSelectedImageTexture = useSetRecoilState(selectedImageTextureState);
+  const setSelectedImageInfo = useSetRecoilState(selectedImageInfoState);
   const [isPending, startTransition] = useTransition();
 
   useLayoutEffect(() => {
@@ -44,7 +46,8 @@ export const ShowcaseCanvas = ( props: Props) => {
   useLayoutEffect(() => {
     if (Object.keys(assetsResouces).length > 0) {
       startTransition(() => {
-        setSelectedImageTexture(assetsResouces["default-7"])
+        setSelectedImageTexture(assetsResouces["art-48pixel-1"]);
+        setSelectedImageInfo({by: assets[0].by, name: "art-48pixel-1"});
       })
     }
   }, [assetsResouces])

@@ -50,6 +50,6 @@ export const StyledLabelWrapper = styled.div`
   justify-content: center;
   pointer-events: none;
   margin: auto;
-  font-size: 16px;
+  font-size: 15px;
   color: #fff;
 `

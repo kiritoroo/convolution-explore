@@ -15,7 +15,7 @@ interface Refs {
 
 export const VisualOutput = React.memo(React.forwardRef<Refs, Props>(( props, ref ) => {
   const imageOut = useRecoilValue(selectedImageOutputSelector);
-  const pixelSize = imageOut.w == 32 ? 8 : imageOut.w == 48 ? 5 : 4;
+  const pixelSize = Math.round(240/imageOut.w)
 
   const svgRef = useRef<SVGSVGElement>(null)
 

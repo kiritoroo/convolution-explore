@@ -71,3 +71,31 @@ export const selectedImageTextureState = atom<THREE.Texture | null>(({
   key: 'selectedImageTextureState',
   default: null
 }))
+
+export const selectedImageInfoState = atom<{by: string, name: string}>(({
+  key: 'selectedImageInfoState',
+  default: {
+    by: '',
+    name: ''
+  }
+}))
+
+export const isCollapseOptionListState = atom<boolean>(({
+  key: 'isCollapseOptionListState',
+  default: false
+}))
+
+export const colorModeState = atom<string>(({
+  key: 'colorModeState',
+  default: 'rgb'
+}))
+
+export const paddingModeState = atom<string>(({
+  key: 'paddingModeState',
+  default: 'nopadding'
+}))
+
+export const isCollapseVisualState = atom<boolean>(({
+  key: 'isCollapseVisualState',
+  default: true
+}))

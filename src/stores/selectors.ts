@@ -366,7 +366,7 @@ export const selectedImageOutputSelector = selector(({
             y: y + Math.floor(kernelSize/2)
           }
 
-          const indexOut1D = indexOut2D.x * imageIn.w + indexOut2D.y;
+          const indexOut1D = indexOut2D.y * imageIn.w + indexOut2D.x;
 
           rgb1dOut[indexOut1D] = windowSliceOutColor;
           rgb2dOut[indexOut2D.y][indexOut2D.x] = windowSliceOutColor;

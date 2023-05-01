@@ -50,6 +50,10 @@ export const MotionCursorWrapper: React.FC<ICursorWrapperProps> = React.memo(( p
       x: mouseXPosition - 100/2,
       y: mouseYPosition - 30/2,
     },
+    hoveroption: { scale: 1, opacity: 1,
+      x: mouseXPosition - 100/2,
+      y: mouseYPosition - 30/2
+    },
     hidden: {
       opacity: 0, scale: 0
     },
@@ -87,7 +91,8 @@ export const MotionCursorBorder: React.FC<ICursorBorderProps> = React.memo(( pro
     default: { borderRadius: 50, border: "0px solid white" },
     hoverlink: { borderRadius: 0, border: "1px solid white", scale: 1.5 },
     hoverkernel: { borderRadius: 0, border: "1px solid white", scale: 2 },
-    hoverimage: { borderRadius: 50, border: "0px solid white" }
+    hoverimage: { borderRadius: 50, border: "0px solid white" },
+    hoveroption: { borderRadius: 50, border: "2px solid white", scale: 1 }
   }), [])
 
   const [scope, animate] = useAnimate()
@@ -132,6 +137,7 @@ export const MotionCursorDot: React.FC<ICursorDotProps> = React.memo(( props ) =
     hoverlink: { scale: 0.5 },
     hoverkernel: { scale: 0.3 },
     hoverimage: { scale: 0 },
+    hoveroption: { scale: 0.3 }
   }), [])
 
   return (

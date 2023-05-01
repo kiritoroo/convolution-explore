@@ -30,11 +30,23 @@ export const StyledPixel = styled.rect`
 `
 
 export const StyledImageWrapper = styled.div`
+  position: relative;
+
   &:hover {
     cursor: crosshair;
   }
-/* 
+
+  /* 
   &:hover ${StyledPixel}:not(.bounding) {
     opacity: 0.5;
   } */
+`
+
+export const StyledImageInfo = styled.div`
+  font-size: 0.75em;
+  font-weight: 300;
+  font-style: italic;
+  position: absolute;
+  bottom: -8%;
+  left: 5%;
 `
