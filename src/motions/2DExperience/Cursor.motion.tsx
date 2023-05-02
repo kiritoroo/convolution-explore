@@ -88,11 +88,11 @@ export const MotionCursorBorder: React.FC<ICursorBorderProps> = React.memo(( pro
   })
 
   const variants = useMemo<Variants>(() => ({
-    default: { borderRadius: 50, border: "0px solid white" },
-    hoverlink: { borderRadius: 0, border: "1px solid white", scale: 1.5 },
-    hoverkernel: { borderRadius: 0, border: "1px solid white", scale: 2 },
-    hoverimage: { borderRadius: 50, border: "0px solid white" },
-    hoveroption: { borderRadius: 50, border: "2px solid white", scale: 1 }
+    default: { borderRadius: "50px", border: "0px solid white" },
+    hoverlink: { borderRadius: "0px", border: "1px solid white", scale: 1.5 },
+    hoverkernel: { borderRadius: "0px", border: "1px solid white", scale: 2 },
+    hoverimage: { borderRadius: "50px", border: "0px solid white" },
+    hoveroption: { borderRadius: "50px", border: "2px solid white", scale: 1 }
   }), [])
 
   const [scope, animate] = useAnimate()

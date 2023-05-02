@@ -4,7 +4,7 @@ import { KernelCategory } from "@comp2d/KernelCategory"
 import { ShowcaseCanvas } from '@comp/3DExperience/showcase/ShowcaseCanvas';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { KernelCardList } from '@comp/2DExperience/KernelCardList';
-import { cursorVariantState, isCollapseVezKernelCategoryState, isFocusKernelInfoState, isRenderSceneState, kernelCategoryDataState } from '@store/atoms';
+import { cursorVariantState, isCollapseVezKernelCategoryState, isCollapseVisualState, isFocusKernelInfoState, isRenderSceneState, kernelCategoryDataState } from '@store/atoms';
 import { kernelCategory as data } from "@asset/data/kernelCategory";
 import { LoadingBox } from '@comp/2DExperience/LoadingBox';
 import { isLoadingState } from '@store/atoms';
@@ -24,13 +24,15 @@ export default function ShowcasePage( props: Props ) {
   const setIsRenderScene = useSetRecoilState(isRenderSceneState);
   const setIsCollapseVez = useSetRecoilState(isCollapseVezKernelCategoryState);
   const setIsFocusKernelInfo = useSetRecoilState(isFocusKernelInfoState);
+  const setIsCollapseVisual = useSetRecoilState(isCollapseVisualState);
 
   useLayoutEffect(() => {
     startTransition(() => {
-      setIsRenderScene(true)
+      setIsRenderScene(true);
       setIsCollapseVez(false);
-      setIsFocusKernelInfo(false)
-      setKernelCategoryData((prevData) => prevData ? prevData : data)
+      setIsCollapseVisual(true);
+      setIsFocusKernelInfo(false);
+      setKernelCategoryData((prevData) => prevData ? prevData : data);
     })
   }, [])
 

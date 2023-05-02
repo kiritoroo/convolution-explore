@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useMemo } from 'react'
 import * as S from '@style/2DExperience/ConvolutionVisual/VisualOutput.styled';
 import { useRecoilValue } from 'recoil';
 import { selectedImageOutputSelector } from '@store/selectors';
@@ -52,24 +52,34 @@ export const VisualOutput = React.memo(React.forwardRef<Refs, Props>(( props, re
     }
   }, [imageOut, svgRef.current])
 
+  const createDefaultImageSVG = useCallback(() => {
+    return (
+      <S.StyledImage ref={svgRef} width={imageOut.w*pixelSize} height={imageOut.h*pixelSize}>
+        {Array.from({ length: imageOut.h }, (_, i) => (
+          Array.from({ length: imageOut.w }, (_, j) => (
+            <S.StyledPixel 
+              key={`${i}-${j}`}
+              x={j*pixelSize}
+              y={i*pixelSize}
+              width={pixelSize}
+              height={pixelSize}
+              fill={`rgb(${255}, ${255}, ${255}, ${0.5})`}>
+            </S.StyledPixel>
+          ))
+        ))}
+      </S.StyledImage>
+    )
+  }, [imageOut])
+
+  const renderedDefaultImageSVG = useMemo<JSX.Element>(() => {
+    return createDefaultImageSVG()
+  }, [imageOut])
+
   return (
     <S.Styledcontainer>
       <S.StyledLabel>Image Output ({imageOut.w}x{imageOut.h})</S.StyledLabel>
       <S.StyledImageWrapper>
-        <S.StyledImage ref={svgRef} width={imageOut.w*pixelSize} height={imageOut.h*pixelSize}>
-        {Array.from({ length: imageOut.h }, (_, i) => (
-            Array.from({ length: imageOut.w }, (_, j) => (
-              <S.StyledPixel 
-                key={`${i}-${j}`}
-                x={j*pixelSize}
-                y={i*pixelSize}
-                width={pixelSize}
-                height={pixelSize}
-                fill={`rgb(${255}, ${255}, ${255}, ${0.5})`}>
-              </S.StyledPixel>
-            ))
-          ))}
-        </S.StyledImage>
+        { renderedDefaultImageSVG }
       </S.StyledImageWrapper>
     </S.Styledcontainer>
   )

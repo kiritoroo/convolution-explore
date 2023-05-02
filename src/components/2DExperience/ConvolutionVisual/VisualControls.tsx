@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useTransition } from 'react';
+import React, { useEffect, useRef, useCallback, useTransition, useMemo } from 'react';
 import * as S from '@style/2DExperience/ConvolutionVisual/VisualControls.styled';
 import { VisualInput } from './VisualInput';
 import { VisualOutput } from './VisualOutput';
@@ -30,7 +30,9 @@ export const VisualControls = React.memo((props: Props) => {
   const kernel = useRecoilValue(selectedKernelSelector);  
   const imageIn = useRecoilValue(selectedImageInputSelector);
   const imageOut = useRecoilValue(selectedImageOutputSelector);
-  const pixelSize = Math.round(240/imageOut.w)
+  const pixelSize = useMemo(() => (
+    Math.round(240/imageOut.w
+  )), [imageOut])
 
   const visualInputRef = useRef<VisualInputRefs>(null);
   const visualOutputRef = useRef<VisualOutputRefs>(null);
@@ -154,7 +156,7 @@ export const VisualControls = React.memo((props: Props) => {
   useEffect(() => {
     if (visualInputRef) {
       visualInputRef.current?.svgElement.current?.addEventListener("mousemove", handleRaycaster);
-      visualInputRef.current?.svgElement.current?.addEventListener("mouseleave", handleUnRaycaster);
+      // visualInputRef.current?.svgElement.current?.addEventListener("mouseleave", handleUnRaycaster);
     }
 
     if (kernel.data && visualInputRef.current && visualOutputRef.current && visualProcessRef.current) {
@@ -169,7 +171,7 @@ export const VisualControls = React.memo((props: Props) => {
 
     return (() => {
       visualInputRef.current?.svgElement.current?.removeEventListener("mousemove", handleRaycaster);
-      visualInputRef.current?.svgElement.current?.removeEventListener("mouseleave", handleUnRaycaster);
+      // visualInputRef.current?.svgElement.current?.removeEventListener("mouseleave", handleUnRaycaster);
     })
   }, [kernel, imageIn, imageOut, visualInputRef, visualOutputRef, visualProcessRef])
 

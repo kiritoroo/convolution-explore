@@ -16,7 +16,6 @@ interface Refs {
 
 export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref ) => {
   const imageIn = useRecoilValue(selectedImageInputSelector);
-  const pixelSize = Math.round(240/imageIn.w)
   const setCursorVariant = useSetRecoilState(cursorVariantState);
   const selectedImageInfo = useRecoilValue(selectedImageInfoState);
 
@@ -37,28 +36,35 @@ export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref
     setCursorVariant("default")
   }, [])
 
+  const createImageSVG = useCallback(( matrix: TColor[][] ) => {
+    const pixelSize = Math.round(240/matrix[0].length)
+    return (
+      <S.StyledImage ref={svgRef} width={matrix[0].length*pixelSize} height={matrix.length*pixelSize}>
+        {matrix.map((row: TColor[], i: number) => (
+          row.map((pixel, j: number) => (
+            <S.StyledPixel 
+              key={`${i}-${j}`}
+              x={j*pixelSize} y={i*pixelSize}
+              width={pixelSize} height={pixelSize}
+              fill={`rgb(${pixel.r}, ${pixel.g}, ${pixel.b})`}>
+            </S.StyledPixel>
+          ))
+        ))}
+      </S.StyledImage>
+    )
+  }, [])
+
+  const renderedImageSVG = useMemo<JSX.Element>(() => {
+    return createImageSVG(imageIn.rgb2d)
+  }, [imageIn])
+
   return (
     <S.StyledContaier>
       <S.StyledLabel>Image Input ({imageIn.w}x{imageIn.h})</S.StyledLabel>
       <S.StyledImageWrapper
         onMouseEnter={ handleMouseEnter }
-        onMouseLeave={ handleMouseLeave }
-        >
-        <S.StyledImage ref={svgRef} width={imageIn.w*pixelSize} height={imageIn.h*pixelSize}>
-          {imageIn.rgb2d.map((row: TColor[], i: number) => (
-            row.map((pixel, j: number) => (
-              <S.StyledPixel 
-                key={`${i}-${j}`}
-                x={j*pixelSize}
-                y={i*pixelSize}
-                width={pixelSize}
-                height={pixelSize}
-                fill={`rgb(${pixel.r}, ${pixel.g}, ${pixel.b})`}>
-              </S.StyledPixel>
-            ))
-          ))}
-        </S.StyledImage>
-
+        onMouseLeave={ handleMouseLeave }>
+        { renderedImageSVG }
         <S.StyledImageInfo>
           Art by: {selectedImageInfo.by}
         </S.StyledImageInfo>

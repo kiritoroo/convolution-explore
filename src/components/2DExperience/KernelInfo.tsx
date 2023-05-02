@@ -22,6 +22,7 @@ export const KernelInfo = React.memo(( props: Props ) => {
     setIsRenderScene(true)
     startTransition(() => {
       setIsFocusKernelInfo(false)
+      setIsCollapseVisual(true)
       setIsCollapseVezKernelCategory(false)
     })
   }, [])
@@ -76,7 +77,8 @@ export const KernelInfo = React.memo(( props: Props ) => {
         </M.MotionInfoWrapper>
 
         <M.MotionVisualWrapper
-          onClick={ handleOnUnSelect }
+          onClick={ () => {} }
+          // onClick={ handleOnUnSelect }
           isCollapse={ isCollapseVisual }>
           <VisualControls/>
         </M.MotionVisualWrapper>

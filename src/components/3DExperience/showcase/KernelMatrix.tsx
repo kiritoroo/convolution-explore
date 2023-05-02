@@ -1,9 +1,7 @@
 import React, { Suspense, useContext, useEffect, useRef, forwardRef, useImperativeHandle, SetStateAction, useLayoutEffect, useState, useCallback, useMemo, useTransition } from "react"
 import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber';
-import gsap from 'gsap';
-import { Float, Center } from '@react-three/drei'
-import { KernelLabel } from '@comp3d/showcase/KernelLabel'
+import { Center } from '@react-three/drei'
 import { KernelBlock } from "@comp3d/showcase/KernelBlock";
 import { 
   selectedKernelSelector,
@@ -80,9 +78,7 @@ export const KernelMatrix = React.memo((props: ChildProps) => {
   return (
     <group ref={ref} position={[0, 0.5, 0]}>
       <Center>
-      {/* <Float floatIntensity={3} rotationIntensity={0} speed={1}> */}
         { renderedMatrix }
-      {/* </Float> */}
       </Center>
     </group>
     )

@@ -71,7 +71,7 @@ export const MotionInfoWrapper: React.FC<IInfoWrapperProps> = React.memo(( props
     if (isCollapse) {
       animate(scope.current, { width: 800 }, { duration: 0.3 })
     } else {
-      animate(scope.current, { width: 400 }, { duration: 0.3 })
+      animate(scope.current, { width: 350 }, { duration: 0.3 })
     }
   }, [])
 
@@ -209,9 +209,9 @@ export const MotionMatrixWrapper: React.FC<IMatrixWrapperPorps> = React.memo(( p
 
   const handleAnimateCollapseVez = useCallback((isCollapse: boolean) => {
     if (isCollapse) {
-      animate(scope.current, { scale: 1, margin: 5 }, { duration: 0.4 })
+      animate(scope.current, { scale: 1, margin: "5px" }, { duration: 0.4 })
     } else {
-      animate(scope.current, { scale: 0.8, margin: 0 }, { duration: 0.3 })
+      animate(scope.current, { scale: 0.8, margin: "0px" }, { duration: 0.3 })
     }
   }, [])
 

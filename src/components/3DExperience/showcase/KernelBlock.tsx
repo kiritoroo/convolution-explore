@@ -51,8 +51,8 @@ export const KernelBlock = React.memo((props: Props) => {
     })
   }, [boxApi])
 
-  const geometry = useRef<THREE.BoxGeometry>(new THREE.BoxGeometry(0.9, 0.9, 0.9))
-  const material = useMemo(() => new THREE.MeshStandardMaterial({
+  const renderedGeometry = useRef<THREE.BoxGeometry>(new THREE.BoxGeometry(0.9, 0.9, 0.9))
+  const renderedMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     metalness:0, 
     roughness: 1,
     transparent: true,
@@ -60,26 +60,26 @@ export const KernelBlock = React.memo((props: Props) => {
     color: new THREE.Color((valMax - value/1.1)/valMax, (valMax - value)/valMax, 1)
   }), [value, valMax])
 
+  const renderedTextMesh = useMemo<JSX.Element>(() => (
+    <Text
+      position={[0, 0.5, 0]} rotation={[-Math.PI/2, 0, Math.PI/2]}
+      font="/fonts/Ki-Medium.ttf" fontSize={0.4}
+      color={'#bfa7f7'} material-toneMapped={false}
+      anchorX="center" anchorY="middle">
+      { value }
+    </Text>
+  ), [value])
+
   return (
     <animated.group
       onPointerMove={ animHover }
       onPointerLeave={ animLeave }
       { ...args }
       { ...boxSpring }>
-      <Text
-        position={[0, 0.5, 0]}
-        rotation={[-Math.PI/2, 0, Math.PI/2]}
-        font="/fonts/Ki-Medium.ttf"
-        fontSize={0.4}
-        color={'#bfa7f7'}
-        material-toneMapped={false}
-        anchorX="center"
-        anchorY="middle">
-        {props.value}
-      </Text>
+      { renderedTextMesh }
       <mesh
-        geometry={geometry.current}
-        material={material}
+        geometry={ renderedGeometry.current }
+        material={ renderedMaterial }
       />
     </animated.group>
   )

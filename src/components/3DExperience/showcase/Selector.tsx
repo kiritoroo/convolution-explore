@@ -8,7 +8,7 @@ import { Suspense, useCallback, useContext, useEffect, useRef, useTransition } f
 import * as THREE from 'three'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedKernelSelector } from "@store/selectors";
-import { cursorContentState, cursorVariantState, isCollapseVezKernelCategoryState, isFocusKernelInfoState, isRenderSceneState } from "@store/atoms";
+import { cursorContentState, cursorVariantState, isCollapseVezKernelCategoryState, isCollapseVisualState, isFocusKernelInfoState, isRenderSceneState } from "@store/atoms";
 import { camAnimFocusKernelIn, camAnimFocusKernelOut } from "./CameraControls";
 
 interface Props {
@@ -24,6 +24,7 @@ export const Selector = (props: Props) => {
   const setIsRenderScene = useSetRecoilState(isRenderSceneState);
   const setCursorVariant = useSetRecoilState(cursorVariantState);
   const setCursorContent = useSetRecoilState(cursorContentState);
+  const setIsCollapseVisual = useSetRecoilState(isCollapseVisualState);
   const [isPending, startTransition] = useTransition();
 
   useFrame(({ viewport, camera, pointer }, delta) => {
@@ -61,6 +62,7 @@ export const Selector = (props: Props) => {
     setIsRenderScene(true)
     startTransition(() => {
       setIsFocusKernelInfo(false)
+      setIsCollapseVisual(true)
       setIsCollapseVezKernelCategory(false)
     })
   }, [])
@@ -80,6 +82,21 @@ export const Selector = (props: Props) => {
     })
   }, [])
 
+  const renderedGeometry = useRef<JSX.Element>(
+    <circleGeometry args={[5, 32, 32]} />
+  )
+
+  const renderedMaterial = useRef<JSX.Element>(
+    <MeshTransmissionMaterial
+      samples={15} resolution={1024}
+      transmission={1} thickness={0.1}
+      chromaticAberration={5} anisotropy={1}
+      roughness={0.4} distortion={0.25}
+      distortionScale={0.25} temporalDistortion={0}
+      ior={0.83} toneMapped={true}
+    />
+  )
+
   return (
     <group>
       <group
@@ -91,20 +108,8 @@ export const Selector = (props: Props) => {
       <mesh ref={ref}
         scale={0}
         onClick={ handleOnUnSelect }>
-        <circleGeometry args={[5, 32, 32]} />
-        <MeshTransmissionMaterial
-          samples={15}
-          resolution={1024}
-          transmission={1}
-          thickness={0.1}
-          chromaticAberration={5}
-          anisotropy={1}
-          roughness={0.4}
-          distortion={0.25}
-          distortionScale={0.25}
-          temporalDistortion={0}
-          ior={0.83}
-          toneMapped={true} />
+        { renderedGeometry.current }
+        { renderedMaterial.current }
       </mesh>
     </group>
   )

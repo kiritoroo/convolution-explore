@@ -4,7 +4,7 @@ import * as S from '@style2d/ImageList.styled';
 import * as M from '@motion2d/ImageList.motion';
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { cursorContentState, resourcesState, selectedImageInfoState, selectedImageTextureState } from "@store/atoms";
+import { cursorContentState, isCollapseVezKernelCategoryState, isCollapseVisualState, isFocusKernelInfoState, resourcesState, selectedImageInfoState, selectedImageTextureState } from "@store/atoms";
 
 interface Props {
 
@@ -15,9 +15,15 @@ export const ImageList = React.memo(( props: Props ) => {
   const setImageInfo = useSetRecoilState(selectedImageInfoState);
   const assetsResouces = useRecoilValue(resourcesState);
   const [isPending, startTransition] = useTransition();
+  const setIsCollapseVisual = useSetRecoilState(isCollapseVisualState);
+  const setIsFocusKernelInfo = useSetRecoilState(isFocusKernelInfoState);
+  const setIsCollapseVezKernelCategory = useSetRecoilState(isCollapseVezKernelCategoryState)
 
   const handleSelectImage = useCallback((name: string, by: string) => {
+    setIsCollapseVezKernelCategory(true)
+    setIsFocusKernelInfo(true);
     startTransition(() => {
+      setIsCollapseVisual(false);
       setImageTexture(assetsResouces[`${name}`])
       setImageInfo({by: by, name: name})
     })

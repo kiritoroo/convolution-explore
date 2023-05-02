@@ -25,7 +25,6 @@ export const IntroCanvas = ( props: Props) => {
 
   return (
     <S.StyledContainer>
-      {/* <Suspense fallback={<LoadingBox/>}> */}
       <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 22 }} >
         <group onUpdate={handleLoaded}>
         <color attach="background" args={['#f0f0f0']} />
@@ -33,19 +32,16 @@ export const IntroCanvas = ( props: Props) => {
 
           <Caption args={{ position: [0,0,-5], rotation: [0,0,0] }}>{`CONVOLUTION\nEXPLORE.`}</Caption>
 
-          {/* <Matrix args={{ position: [0, 0, 0], rotation: [Math.PI/2,0,0] }}/> */}
           { Array.from({ length: 10 }, (_, i) => <Matrix key={i} />) }
 
           <Rig/>
           <Env/>
           <Background/>
-          {/* <Ground/> */}
           <PostProcessing/>
       
           <OrbitControls enableDamping={true}/>
         </group>
       </Canvas>
-      {/* </Suspense> */}
     </S.StyledContainer>
   )
 }

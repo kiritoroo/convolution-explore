@@ -29,10 +29,6 @@ export const ShowcaseCanvas = ( props: Props) => {
 
   useLayoutEffect(() => {
     if (dataListByCategory["filtering"]) {
-      // setSelectedKernel((prevItem) => prevItem ? prevItem : {
-      //   info: dataListByCategory["filtering"][0].info,
-      //   data: dataListByCategory["filtering"][0].data
-      // })
       startTransition(() => {
         setSelectedKernel({
           info: dataListByCategory["filtering"][0].info,

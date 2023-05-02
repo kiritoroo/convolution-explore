@@ -5,7 +5,8 @@ import {
   selectedCategoryState,
   isFocusKernelInfoState,
   isRenderSceneState,
-  cursorVariantState
+  cursorVariantState,
+  isCollapseVisualState
 } from '@store/atoms'
 import {
   kernelCategoryDataSelector
@@ -28,11 +29,13 @@ export const KernelCategory = React.memo((props: IProps) => {
   const [isFocusKernelInfo, setIsFocusKernelInfo] = useRecoilState(isFocusKernelInfoState)
   const setIsRenderScene = useSetRecoilState(isRenderSceneState);
   const setCursorVariant = useSetRecoilState(cursorVariantState);
+  const setIsCollapseVisual = useSetRecoilState(isCollapseVisualState);
 
   const handleButtonCollapseVezClick = useCallback(() => {
     setIsRenderScene(true)
     setIsCollapseVez((prevState) => !prevState);
     setIsFocusKernelInfo(false)
+    setIsCollapseVisual(true)
   }, []);
 
   const handleButtonCollapseHozClick = useCallback(() => {
