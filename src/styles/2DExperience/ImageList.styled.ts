@@ -50,24 +50,26 @@ export const StyledImageHint = styled.div`
   left: 50%;
 `
 
-export const StyledImageWrapper = styled.div`
+export const StyledImageWrapper = styled(motion.div)`
   background: linear-gradient(to left, rgb(255, 255, 255, 0.2) 50%, rgb(168, 130, 250, 0.2) 50%) right;
   background-size: 200%;
   transition: .3s ease-out;
-
+  border: 1px solid #A882FA;
+  margin-bottom: 10px;
   &:hover {
     background-position: left;
     cursor: crosshair;    
   }
 `
 
-export const StyledImage = styled(motion.img)`
+export const StyledImage = styled(motion.img)<{ colorMode: string }>`
   width: 64px;
   height: 64px;
   margin: 5px;
-  border: 1px solid #A882FA;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: pixelated;
-  image-rendering: crisp-edges; 
+  image-rendering: crisp-edges;
+  transition: filter 0.3s ease-in-out;
+  filter: grayscale(${(props) => (props.colorMode == 'rgb' ? '0%' : '100%')});
 `

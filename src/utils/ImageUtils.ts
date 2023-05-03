@@ -8,6 +8,6 @@ export const getDataTexture = (image: any): ImageData => {
 }
 
 export const rgb2Gray = (r: number, g: number, b: number): number => {
-  const grayValue = 0.2989 * r + 0.5870 * g + 0.1140 * b;
+  const grayValue = 0.2990 * r + 0.5870 * g + 0.1140 * b;
   return Math.floor(grayValue);
 }

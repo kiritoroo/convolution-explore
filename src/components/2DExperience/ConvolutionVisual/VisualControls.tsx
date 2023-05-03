@@ -5,6 +5,7 @@ import { VisualOutput } from './VisualOutput';
 import { VisualProcess } from './VisualProcess';
 import { useRecoilValue } from 'recoil';
 import { selectedImageInputSelector, selectedImageOutputSelector, selectedKernelSelector } from '@store/selectors';
+import { colorModeState, isPaddingModeState } from '@store/atoms';
 interface Props {
 
 }
@@ -30,6 +31,8 @@ export const VisualControls = React.memo((props: Props) => {
   const kernel = useRecoilValue(selectedKernelSelector);  
   const imageIn = useRecoilValue(selectedImageInputSelector);
   const imageOut = useRecoilValue(selectedImageOutputSelector);
+  const colorMode = useRecoilValue(colorModeState);
+  const isPadding = useRecoilValue(isPaddingModeState);
   const pixelSize = useMemo(() => (
     Math.round(240/imageOut.w
   )), [imageOut])
@@ -71,7 +74,7 @@ export const VisualControls = React.memo((props: Props) => {
         const indexIn1d = ((y+ky) * imageIn.w + (x+kx));
         windowSliceInRect.current.push(visualInputRef.current?.svgRects1d[indexIn1d]!);
         windowSliceInRect.current[windowSliceInRect.current.length - 1].classList.add("bounding");
-
+        
         windowSliceInColorRed.current.push(imageIn.cRed1d[indexIn1d]);
         windowSliceInColorGreen.current.push(imageIn.cGreen1d[indexIn1d]);
         windowSliceInColorBlue.current.push(imageIn.cBlue1d[indexIn1d]);
@@ -87,11 +90,14 @@ export const VisualControls = React.memo((props: Props) => {
     windowSliceOutColorBlue.current = undefined;
     windowSliceOutGray.current = undefined;
 
-    const indexOut2d = {
-      x: x + Math.floor(kernel.data!.size/2),
-      y: y + Math.floor(kernel.data!.size/2)
+    let indexOut2D
+    if (isPadding) {
+      indexOut2D = { x: x, y: y }
+    } else {
+      indexOut2D = { x: x + Math.floor(kernel.data!.size/2), y: y + Math.floor(kernel.data!.size/2) }
     }
-    const indexOut1d = indexOut2d.y * imageOut.w + indexOut2d.x
+
+    const indexOut1d = indexOut2D.y * imageOut.w + indexOut2D.x
     windowSliceOutRect.current = visualOutputRef.current?.svgRects1d[indexOut1d] as SVGRectElement;
     windowSliceOutRect.current.classList.add("bounding");
 
@@ -99,22 +105,32 @@ export const VisualControls = React.memo((props: Props) => {
     windowSliceOutColorGreen.current = imageOut.rgb1dOut[indexOut1d].g;
     windowSliceOutColorBlue.current = imageOut.rgb1dOut[indexOut1d].b;
     windowSliceOutGray.current = imageOut.gray1dOut[indexOut1d];
-  }, [kernel.data, imageOut, visualOutputRef.current])
+  }, [kernel.data, imageOut, visualOutputRef.current, isPadding])
 
   const setProcess = useCallback(() => {
     visualProcessRef.current?.divRects1d.forEach((rect, i: number) => {
-      rect.style.background = `rgb(
-        ${windowSliceInColorRed.current[i]},
-        ${windowSliceInColorGreen.current[i]},
-        ${windowSliceInColorBlue.current[i]})`
+      colorMode == 'rgb' 
+        ? rect.style.background = `rgb(
+          ${windowSliceInColorRed.current[i]},
+          ${windowSliceInColorGreen.current[i]},
+          ${windowSliceInColorBlue.current[i]})`
+        : rect.style.background = `rgb(
+          ${windowSliceInGray.current[i]},
+          ${windowSliceInGray.current[i]},
+          ${windowSliceInGray.current[i]})`
     })
     if (visualProcessRef.current?.divOut.current) {
-      visualProcessRef.current.divOut.current.style.background = `rgb(
-        ${windowSliceOutColorRed.current},
-        ${windowSliceOutColorGreen.current},
-        ${windowSliceOutColorBlue.current})`;
+      colorMode == 'rgb'
+        ? visualProcessRef.current.divOut.current.style.background = `rgb(
+          ${windowSliceOutColorRed.current},
+          ${windowSliceOutColorGreen.current},
+          ${windowSliceOutColorBlue.current})`
+        : visualProcessRef.current.divOut.current.style.background = `rgb(
+          ${windowSliceOutGray.current},
+          ${windowSliceOutGray.current},
+          ${windowSliceOutGray.current})`
     }
-  }, [visualProcessRef.current])
+  }, [visualProcessRef.current, colorMode])
 
   const handleRaycaster = useCallback((event: MouseEvent) => {
     const rect = event.target as SVGRectElement;
@@ -137,11 +153,11 @@ export const VisualControls = React.memo((props: Props) => {
     startTransition(() => {
       clearWindowInSlice();
       clearWindowOutSlice();
-      setWindowInSlice(indexX, indexY);
-      setWindowOutSlice(indexX, indexY);
+      setWindowInSlice(Math.round(indexX), Math.round(indexY));
+      setWindowOutSlice(Math.round(indexX), Math.round(indexY));
       setProcess();
     }) 
-  }, [imageIn, imageOut, kernel.data])
+  }, [imageIn, imageOut, kernel.data, colorMode])
 
   const handleUnRaycaster = useCallback(() => {
     startTransition(() => {
@@ -173,7 +189,7 @@ export const VisualControls = React.memo((props: Props) => {
       visualInputRef.current?.svgElement.current?.removeEventListener("mousemove", handleRaycaster);
       // visualInputRef.current?.svgElement.current?.removeEventListener("mouseleave", handleUnRaycaster);
     })
-  }, [kernel, imageIn, imageOut, visualInputRef, visualOutputRef, visualProcessRef])
+  }, [kernel, imageIn, imageOut, visualInputRef, visualOutputRef, visualProcessRef, colorMode])
 
   return (
     <S.StyledContainer>

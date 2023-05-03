@@ -1,17 +1,13 @@
-import React, { useEffect, Suspense, useCallback, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { kernelCategory as data } from "@asset/data/kernelCategory";
 import { isLoadingResourcesState, isLoadingState, kernelCategoryDataState, resourcesState } from '@store/atoms'
-import { Loading } from '@comp2d/Loading'
 import { Routes, Route, HashRouter } from "react-router-dom"
-import { IntroCanvas } from '@comp3d/Intro/IntroCanvas';
-import { Navbar } from '@comp/2DExperience/Navbar';
 import IntroPage from './pages/IntroPage';
 import ShowcasePage from './pages/ShowcasePage';
 import VisualPage from './pages/VisualPage';
 import { LoadingBox } from '@comp/2DExperience/LoadingBox';
 import { AnimatePresence } from 'framer-motion';
-import { emitEvent } from '@util/Event';
 import { Cursor } from '@comp/2DExperience/Cursor';
 import { useLayoutEffect } from 'react';
 import Resources from '@util/Resources';
@@ -28,15 +24,6 @@ export const App = () => {
     setKernelCategoryData(data)
   }, [])
 
-  const update = useCallback(() => {
-    emitEvent('eUpdate')
-    requestAnimationFrame(update);
-  }, [])
-
-  useEffect(() => {
-    update();
-  }, [])
-
   useLayoutEffect(() => {
     const resouces = new Resources(assets);
 
@@ -48,10 +35,6 @@ export const App = () => {
 
   return (
     <React.Fragment>
-      {/* <IntroCanvas/> */}
-      {/* <Layout/> */}
-      {/* <Loading/> */}
-      
       <AnimatePresence>
         { (isLoading || isLoadingResources) && <LoadingBox/> }
       </AnimatePresence>
@@ -59,9 +42,7 @@ export const App = () => {
       <AnimatePresence>
         { !isLoading && <Cursor/> }
       </AnimatePresence>
-      
 
-      {/* <Suspense fallback={<LoadingBox/>}> */}
       <HashRouter>
         <Routes>
           <Route path="/" element={<IntroPage/>}/>
@@ -69,7 +50,6 @@ export const App = () => {
           <Route path="/visual" element={<VisualPage/>}/>
         </Routes>
       </HashRouter>
-      {/* </Suspense> */}
     </React.Fragment>
   )
 }

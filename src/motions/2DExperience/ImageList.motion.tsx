@@ -6,7 +6,7 @@ import {
 } from 'framer-motion';
 import {
   StyledImageListWraper,
-  StyledImage
+  StyledImageWrapper
 } from '@style2d/ImageList.styled';
 
 interface IImageListWrapperProps {
@@ -38,27 +38,30 @@ export const MotionImageListWrapper: React.FC<IImageListWrapperProps> = React.me
   )
 })
 
-interface IImageProps {
-  src: string
+interface IImageWrapperProps {
+  onClick: () => void
+  children: React.ReactNode
 }
-export const MotionImage:React.FC<IImageProps> = React.memo(( props ) => {
-  const { src } = props;
+export const MotionImageWrapper:React.FC<IImageWrapperProps> = React.memo(( props ) => {
+  const { children, onClick } = props;
 
   const transition = useRef<Transition>({
-    duration: 1
+    duration: 0.5
   })
 
   const variants = useRef<Variants>({
-    hidden: { opacity: 0, y: '-100%' },
+    hidden: { opacity: 0, y: '100%' },
     show: { opacity: 1, y: 0 },
     exit: { opacity: 0 }
   })
 
   return (
-    <StyledImage 
-      src={ src }
+    <StyledImageWrapper
+      onClick={ onClick }
       variants={ variants.current }
       transition={ transition.current }
-    />
+    >
+      { children }
+    </StyledImageWrapper>
   )
 })

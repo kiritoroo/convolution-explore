@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef } f
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import * as S from '@style/2DExperience/ConvolutionVisual/VisualInput.styled';
 import { TColor } from "@type/index";
-import { cursorVariantState, selectedImageInfoState } from "@store/atoms";
+import { colorModeState, cursorVariantState, selectedImageInfoState } from "@store/atoms";
 
 interface Props {
 
@@ -18,6 +18,7 @@ export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref
   const imageIn = useRecoilValue(selectedImageInputSelector);
   const setCursorVariant = useSetRecoilState(cursorVariantState);
   const selectedImageInfo = useRecoilValue(selectedImageInfoState);
+  const colorMode = useRecoilValue(colorModeState);
 
   const svgRef = useRef<SVGSVGElement>(null)
 
@@ -36,8 +37,8 @@ export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref
     setCursorVariant("default")
   }, [])
 
-  const createImageSVG = useCallback(( matrix: TColor[][] ) => {
-    const pixelSize = Math.round(240/matrix[0].length)
+  const createImageSVGRGB = useCallback(( matrix: TColor[][] ) => {
+    const pixelSize = Math.ceil(240/matrix[0].length)
     return (
       <S.StyledImage ref={svgRef} width={matrix[0].length*pixelSize} height={matrix.length*pixelSize}>
         {matrix.map((row: TColor[], i: number) => (
@@ -54,9 +55,29 @@ export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref
     )
   }, [])
 
+  const createImageSVGGray = useCallback(( matrix: number[][] ) => {
+    const pixelSize = Math.ceil(240/matrix[0].length)
+    return (
+      <S.StyledImage ref={svgRef} width={matrix[0].length*pixelSize} height={matrix.length*pixelSize}>
+        {matrix.map((row: number[], i: number) => (
+          row.map((pixel, j: number) => (
+            <S.StyledPixel 
+              key={`${i}-${j}`}
+              x={j*pixelSize} y={i*pixelSize}
+              width={pixelSize} height={pixelSize}
+              fill={`rgb(${pixel}, ${pixel}, ${pixel})`}>
+            </S.StyledPixel>
+          ))
+        ))}
+      </S.StyledImage>
+    )
+  }, [])
+
   const renderedImageSVG = useMemo<JSX.Element>(() => {
-    return createImageSVG(imageIn.rgb2d)
-  }, [imageIn])
+    return colorMode == 'rgb' 
+      ? createImageSVGRGB(imageIn.rgb2d)
+      : createImageSVGGray(imageIn.gray2d)
+  }, [imageIn, colorMode])
 
   return (
     <S.StyledContaier>

@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { useControls } from 'leva'
 import { useRecoilValue } from "recoil"
 import { selectedSizeSelector } from "@store/selectors"
+import { colorModeState } from "@store/atoms"
 
 interface Props {
   args: {
@@ -23,6 +24,7 @@ export const KernelBlock = React.memo((props: Props) => {
 
   const [isPending, startTransition] = useTransition();
   const { randIndicesAnim } = useRecoilValue(selectedSizeSelector)
+  const colorMode = useRecoilValue(colorModeState)
 
   const [boxSpring, boxApi] = useSpring(
     () => ({ "scale": 0.2, config: { mass: 2, friction: 10 } }),
@@ -57,14 +59,16 @@ export const KernelBlock = React.memo((props: Props) => {
     roughness: 1,
     transparent: true,
     opacity: 1,
-    color: new THREE.Color((valMax - value/1.1)/valMax, (valMax - value)/valMax, 1)
-  }), [value, valMax])
+    color: colorMode == 'rgb' 
+      ? new THREE.Color((valMax - value/1.1)/valMax, (valMax - value)/valMax, 1) 
+      : new THREE.Color((valMax - value/1.4)/valMax, (valMax - value/1.4)/valMax, (valMax - value/1.4)/valMax) 
+  }), [value, valMax, colorMode])
 
   const renderedTextMesh = useMemo<JSX.Element>(() => (
     <Text
       position={[0, 0.5, 0]} rotation={[-Math.PI/2, 0, Math.PI/2]}
       font="/fonts/Ki-Medium.ttf" fontSize={0.4}
-      color={'#bfa7f7'} material-toneMapped={false}
+      color={ '#ffffff' } material-toneMapped={false}
       anchorX="center" anchorY="middle">
       { value }
     </Text>

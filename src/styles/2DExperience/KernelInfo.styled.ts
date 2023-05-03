@@ -27,10 +27,6 @@ export const StyledInfoWrapper = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);
   padding: 25px 50px;
   border-radius: 10px;
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; */
 `
 
 export const StyledInfoLabel = styled(motion.div)`
@@ -49,13 +45,12 @@ export const StyledInfoDescription = styled(motion.div)`
 
 export const StyledVisualWrapper = styled(motion.div)`
   margin-left: 50px;
+  user-select: none;
 `
 
 export const StyledMatrixWrapper = styled(motion.div)`
   margin: 20px 0;
-  /* padding: 25px 10px; */
   border-radius: 5px;
-  /* background: linear-gradient(to bottom, rgb(255, 255, 255, 0.2) 0%, rgb(255, 255, 255, 0.5) 100%); */
 `
 
 export const StyledFlexMatrixVez = styled.div`

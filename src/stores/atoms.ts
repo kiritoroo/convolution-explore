@@ -90,9 +90,9 @@ export const colorModeState = atom<string>(({
   default: 'rgb'
 }))
 
-export const paddingModeState = atom<string>(({
-  key: 'paddingModeState',
-  default: 'nopadding'
+export const isPaddingModeState = atom<boolean>(({
+  key: 'isPaddingModeState',
+  default: false
 }))
 
 export const isCollapseVisualState = atom<boolean>(({

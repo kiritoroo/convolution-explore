@@ -3,7 +3,9 @@ import {
   selectedCategoryState,
   selectedSizeState,
   selectedKernelState,
-  selectedImageTextureState
+  selectedImageTextureState,
+  isPaddingModeState,
+  isFocusKernelInfoState
 } from '@store/atoms'
 import { TColor, TColorAlpha, TKernelCategory, TKernelData, TKernelInfo } from "@type/index";
 import * as ImageUtils from '@util/ImageUtils'
@@ -253,10 +255,43 @@ export const selectedImageInputSelector = selector(({
   get: ({get}) => {
     const texture: THREE.Texture | null = get(selectedImageTextureState)
     const data: ImageData | null = texture ? ImageUtils.getDataTexture(texture.image) : null
-    const w: number = data?.width ?? 0
-    const h: number = data?.height ?? 0
-    const pixelCount: number = w * h
-    const rgba1d: Uint8ClampedArray = data?.data ?? new Uint8ClampedArray(pixelCount*4)
+    let w: number = data?.width ?? 0
+    let h: number = data?.height ?? 0
+    let pixelCount: number = w * h
+    let rgba1d: Uint8ClampedArray = data?.data ?? new Uint8ClampedArray(pixelCount*4)
+
+    const isPadding = get(isPaddingModeState)
+    const kernel = get(selectedKernelSelector)
+    if (isPadding && kernel.data) {
+      const padding_size = Math.floor(kernel.data?.size /2);
+      let pad_top, pad_bottom, pad_left, pad_right;
+      pad_top = padding_size;
+      pad_left = padding_size;
+      if (kernel.data.size%2==0) {
+        pad_bottom = Math.floor(kernel.data.size/2) - 1; 
+        pad_right = Math.floor(kernel.data.size/2) - 1;
+      } else {
+        pad_bottom = padding_size;
+        pad_right = padding_size;
+      }
+
+      const padded_data = new Uint8ClampedArray((w + pad_left + pad_right) * (h + pad_top + pad_bottom) * 4).fill(255);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const sourceIndex = (y * w + x) * 4;
+          const destIndex = ((y + pad_top) * (w + (pad_left + pad_right)) + (x + pad_top)) * 4;
+          for (let i = 0; i < 4; i++) {
+            padded_data[destIndex + i] = rgba1d[sourceIndex + i];
+          }
+        }
+      }
+
+      rgba1d = padded_data;
+      w = w + (pad_left + pad_right);
+      h = h + (pad_top + pad_bottom);
+      pixelCount = w * h;
+    }
+
     const rgba2d: TColorAlpha[][] = []
     const rgb1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount*3)
     const rgb2d: TColor[][] = []
@@ -329,17 +364,18 @@ export const selectedImageOutputSelector = selector(({
     const kernel = get(selectedKernelSelector)
     const imageIn = get(selectedImageInputSelector)
     const kernelSize = kernel.data?.size ?? 0
-    const w = imageIn.w
-    const h = imageIn.h
+    const w = imageIn.data?.width ?? 0
+    const h = imageIn.data?.height ?? 0
     const pixelCount = imageIn.pixelCount
     const rgb1dOut: TColor[] = Array(pixelCount).fill({ r: 255, g: 255, b:255 });
     const rgb2dOut: TColor[][] = Array.from({length: h}, () => Array(w).fill({ r: 255, g: 255, b:255 }));
     const gray1dOut: Uint8ClampedArray = new Uint8ClampedArray(imageIn.pixelCount)
     const gray2dOut: number[][] = Array.from({length: h}, () => Array(w).fill(255));
+    const isPadding = get(isPaddingModeState)
 
     if (imageIn.data) {
-      for (let y = 0; y < imageIn.h - (kernelSize - 1); y++) {
-        for (let x = 0; x < imageIn.h - (kernelSize - 1); x++) {
+      for (let y = 0; y < (isPadding ? h : h - (kernelSize-1)); y++) {
+        for (let x = 0; x < (isPadding ? w: w - (kernelSize-1)); x++) {
           
           const windowSliceInRed: number[] = [];
           const windowSliceInGreen: number[] = [];
@@ -360,13 +396,15 @@ export const selectedImageOutputSelector = selector(({
 
           const windowSliceOutColor = result?.outRGB ?? { r: 255, g: 255, b:255 };
           const windowSliceOutGray = result?.outGray ?? 255;
-
-          const indexOut2D = {
-            x: x + Math.floor(kernelSize/2),
-            y: y + Math.floor(kernelSize/2)
+          
+          let indexOut2D
+          if (isPadding) {
+            indexOut2D = { x: x, y: y }
+          } else {
+            indexOut2D = { x: x + Math.floor(kernelSize/2), y: y + Math.floor(kernelSize/2) }
           }
 
-          const indexOut1D = indexOut2D.y * imageIn.w + indexOut2D.x;
+          const indexOut1D = indexOut2D.y * w + indexOut2D.x;
 
           rgb1dOut[indexOut1D] = windowSliceOutColor;
           rgb2dOut[indexOut2D.y][indexOut2D.x] = windowSliceOutColor;
