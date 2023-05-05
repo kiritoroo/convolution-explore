@@ -8,7 +8,7 @@ i18next
   .use(HttpApi)
   .use(LanguageDetector)
   .init({
-    lng: 'ja',
+    lng: 'en',
     supportedLngs: ["en", "ja"],
     fallbackLng: "en",
     interpolation: {

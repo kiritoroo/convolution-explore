@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useTransition, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback, useTransition, useMemo, useState } from 'react';
 import * as S from '@style/2DExperience/ConvolutionVisual/VisualControls.styled';
 import { VisualInput } from './VisualInput';
 import { VisualOutput } from './VisualOutput';
@@ -7,6 +7,8 @@ import { useRecoilValue } from 'recoil';
 import { selectedImageInputSelector, selectedImageOutputSelector, selectedKernelSelector } from '@store/selectors';
 import { colorModeState, isPaddingModeState } from '@store/atoms';
 import { useTranslation } from 'react-i18next';
+import { BiPlayCircle, BiRefresh } from 'react-icons/bi';
+
 interface Props {
 
 }
@@ -19,6 +21,9 @@ interface VisualInputRefs {
 interface VisualOutputRefs {
   svgElement: React.RefObject<SVGSVGElement>
   svgRects1d: SVGRectElement[]
+  fillWhite: () => void
+  fillOutputRGB: () => void
+  fillOutputGray: () => void
 }
 
 interface VisualProcessRefs {
@@ -38,6 +43,9 @@ export const VisualControls = React.memo((props: Props) => {
   const pixelSize = useMemo(() => (
     Math.round(240/imageOut.w
   )), [imageOut])
+  const timeoutIds = useRef<any[]>([]);
+  const animSpeed = useRef<number>(10);
+  const [isPlayAnim, setIsPlayAnim] = useState(false)
 
   const visualInputRef = useRef<VisualInputRefs>(null);
   const visualOutputRef = useRef<VisualOutputRefs>(null);
@@ -54,15 +62,35 @@ export const VisualControls = React.memo((props: Props) => {
   const windowSliceOutColorBlue = useRef<number>();
   const windowSliceOutGray = useRef<number>();
 
-  const clearWindowInSlice = () => {
+  const clearWindowInSlice = useCallback(() => {
     windowSliceInRect.current.forEach((rect: SVGRectElement) => {
       rect.classList.remove('bounding');
     })
-  }
+  }, [windowSliceInRect.current])
 
-  const clearWindowOutSlice = () => {
+  const clearWindowOutSlice = useCallback(() => {
     windowSliceOutRect.current?.classList.remove('bounding');
-  }
+  }, [windowSliceOutRect.current])
+
+  const clearAnimConvolution = useCallback(() => {
+    timeoutIds.current.forEach((id) => clearTimeout(id))
+  }, [timeoutIds.current])
+
+  const handleRefresh = useCallback(() => {
+    setIsPlayAnim(false)
+    clearAnimConvolution()
+    colorMode == 'rgb'
+      ? visualOutputRef.current?.fillOutputRGB()
+      : visualOutputRef.current?.fillOutputGray();
+
+    startTransition(() => {
+      clearWindowInSlice();
+      clearWindowOutSlice();
+      setWindowInSlice(0, 0);
+      setWindowOutSlice(0, 0);
+      setProcess();
+    }) 
+  }, [visualOutputRef.current, colorMode])
 
   const setWindowInSlice = useCallback((x: number, y: number) => {
     windowSliceInRect.current = [];
@@ -107,7 +135,12 @@ export const VisualControls = React.memo((props: Props) => {
     windowSliceOutColorGreen.current = imageOut.rgb1dOut[indexOut1d].g;
     windowSliceOutColorBlue.current = imageOut.rgb1dOut[indexOut1d].b;
     windowSliceOutGray.current = imageOut.gray1dOut[indexOut1d];
-  }, [kernel.data, imageOut, visualOutputRef.current, isPadding])
+
+    windowSliceOutRect.current.setAttribute("fill", colorMode == 'rgb'
+      ? `rgb(${windowSliceOutColorRed.current}, ${windowSliceOutColorGreen.current}, ${windowSliceOutColorBlue.current})`
+      : `rgb(${windowSliceOutGray.current}, ${windowSliceOutGray.current}, ${windowSliceOutGray.current})`
+    );
+  }, [kernel.data, imageOut, visualOutputRef.current, isPadding, colorMode])
 
   const setProcess = useCallback(() => {
     visualProcessRef.current?.divRects1d.forEach((rect, i: number) => {
@@ -135,6 +168,7 @@ export const VisualControls = React.memo((props: Props) => {
   }, [visualProcessRef.current, colorMode])
 
   const handleRaycaster = useCallback((event: MouseEvent) => {
+    clearAnimConvolution()
     const rect = event.target as SVGRectElement;
 
     let indexX = rect.x.baseVal.value/pixelSize
@@ -171,6 +205,30 @@ export const VisualControls = React.memo((props: Props) => {
     }) 
   }, [imageIn, imageOut, kernel.data])
 
+  const handleAnimConvolution = useCallback(() => {
+    clearAnimConvolution()
+    setIsPlayAnim(true)
+    visualOutputRef.current?.fillWhite();
+
+    for (let y = 0; y < imageIn.h - (kernel.data!.size - 1); y++) {
+      for (let x = 0; x < imageIn.w - (kernel.data!.size - 1); x++) {
+        timeoutIds.current.push(setTimeout(() => {
+          startTransition(() => {
+            clearWindowInSlice();
+            clearWindowOutSlice();
+            setWindowInSlice(Math.round(x), Math.round(y));
+            setWindowOutSlice(Math.round(x), Math.round(y));
+            setProcess();
+          }) 
+        }, (x + y * imageIn.w) * animSpeed.current));
+  
+        if (x === imageIn.w - kernel.data!.size && y !== imageIn.h -  kernel.data!.size) {
+          timeoutIds.current.push(setTimeout(() => {}, (x + y * imageIn.w +  kernel.data!.size) * animSpeed.current));
+        }
+      }
+    }
+  }, [visualOutputRef.current, colorMode])
+
   useEffect(() => {
     if (visualInputRef) {
       visualInputRef.current?.svgElement.current?.addEventListener("mousemove", handleRaycaster);
@@ -178,6 +236,7 @@ export const VisualControls = React.memo((props: Props) => {
     }
 
     if (kernel.data && visualInputRef.current && visualOutputRef.current && visualProcessRef.current) {
+      clearAnimConvolution()
       startTransition(() => {
         clearWindowInSlice();
         clearWindowOutSlice();
@@ -195,6 +254,15 @@ export const VisualControls = React.memo((props: Props) => {
 
   return (
     <S.StyledContainer>
+      <S.StyledButtonListWrapper>
+        <S.StyledButtonPlayWrapper onClick={ handleAnimConvolution }>
+          <BiPlayCircle size={'1.25em'} color='#A882FA'></BiPlayCircle>
+        </S.StyledButtonPlayWrapper>
+        <S.StyledButtonRefreshWrapper onClick={ handleRefresh }>
+          <BiRefresh size={'1.25em'} color='#A882FA'></BiRefresh>
+        </S.StyledButtonRefreshWrapper>
+      </S.StyledButtonListWrapper>
+
       <S.StyledLabel>
         { t('showcasepage.visual.title') }
       </S.StyledLabel>

@@ -108,7 +108,7 @@
           "label": "Sharpen Kernel 2",
           "description": "A sharpen kernel is a type of image filter used to enhance the edges and details in an image by increasing the contrast between neighboring pixels. It works by subtracting a blurred version of the image from the original image, which emphasizes the high-frequency components of the image."
         },
-        "sharpen": {
+        "sharpen3": {
           "label": "Sharpen Kernel 3",
           "description": "A sharpen kernel is a type of image filter used to enhance the edges and details in an image by increasing the contrast between neighboring pixels. It works by subtracting a blurred version of the image from the original image, which emphasizes the high-frequency components of the image."
         }

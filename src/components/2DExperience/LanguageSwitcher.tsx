@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { motion, Variants, useAnimate } from "framer-motion";
 import * as S from '@style2d/LanguageSwitcher.styled'
 import * as M from '@motion2d/LanguageSwitcher.motion';
+import { useSetRecoilState } from "recoil";
+import { isLoadingState } from "@store/atoms";
 
 const variants: Variants = {
   hidden: { opacity: 0, scale: 0, height: 0 },
@@ -15,7 +17,8 @@ export const LanguageSwitcher = () => {
   const supportLngs: string[] = i18n.options.supportedLngs as string[]
   const currLng = i18n.language
   const [isOpen, setIsOpen] = useState(false)
-  
+  const setIsLoading = useSetRecoilState(isLoadingState);
+
   const timeOutIds: Array<any> = []
 
   useEffect(() => {
@@ -26,22 +29,29 @@ export const LanguageSwitcher = () => {
     }, 1000))
   }, [isOpen])
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     timeOutIds.forEach((id) => clearTimeout(id))
     setIsOpen(true)
-  }
+  }, [])
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     timeOutIds.push(setTimeout(() => {
       if (isOpen) {
         setIsOpen(false)
       }
     }, 500))
-  }
+  }, [])
 
-  const handleChangeLocale = (locale: string) => {
+  const handleChangeLocale = useCallback((locale: string) => {
+    setIsLoading(true)
+    // window.location.reload();
+    localStorage.setItem("user-locale", locale)
     i18n.changeLanguage(locale)
-  }
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 500)
+  }, [])
 
   const createMenuListItem = useCallback((langList: string[]) => {
     return (

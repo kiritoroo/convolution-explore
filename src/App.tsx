@@ -12,15 +12,16 @@ import { Cursor } from '@comp/2DExperience/Cursor';
 import { useLayoutEffect } from 'react';
 import Resources from '@util/Resources';
 import { assets } from './assets';
+import { useTranslation } from 'react-i18next';
 
 export const App = () => {
   const isLoading = useRecoilValue(isLoadingState)
   const [isLoadingResources, setIsLoadingResources] = useRecoilState(isLoadingResourcesState);
   const setResources = useSetRecoilState(resourcesState);
   const setKernelCategoryData = useSetRecoilState(kernelCategoryDataState)
+  const { i18n } = useTranslation();
 
   useEffect(() => {
-    console.log('App re:render')
     setKernelCategoryData(data)
   }, [])
 
@@ -31,6 +32,9 @@ export const App = () => {
       setResources(resouces.items)
       setIsLoadingResources(false)
     })
+
+    const locale = localStorage.getItem("user-locale")
+    i18n.changeLanguage(locale ?? 'en')
   }, [])
 
   return (

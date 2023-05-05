@@ -13,6 +13,9 @@ interface Props {
 interface Refs {
   svgElement: React.RefObject<SVGSVGElement>
   svgRects1d: SVGRectElement[]
+  fillWhite: () => void
+  fillOutputRGB: () => void
+  fillOutputGray: () => void
 }
 
 export const VisualOutput = React.memo(React.forwardRef<Refs, Props>(( props, ref ) => {
@@ -26,9 +29,12 @@ export const VisualOutput = React.memo(React.forwardRef<Refs, Props>(( props, re
   useImperativeHandle(ref, () => {
     return {
       svgElement: svgRef,
-      svgRects1d: (svgRef.current?.childNodes ?? []) as SVGRectElement[]
+      svgRects1d: (svgRef.current?.childNodes ?? []) as SVGRectElement[],
+      fillWhite: fillWhite,
+      fillOutputRGB: fillOutputRGB,
+      fillOutputGray: fillOutputGray
     }
-  }, [svgRef.current])
+  }, [svgRef.current, imageOut])
 
   const fillWhite = useCallback(() => {
     Array.from({ length: imageOut.h }, (_, i) => {
