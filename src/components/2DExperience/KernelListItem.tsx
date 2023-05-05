@@ -5,6 +5,7 @@ import { TKernelData, TKernelInfo } from "@type/index";
 import { selectedKernelState } from "@store/atoms";
 import { selectedKernelSelector } from "@store/selectors";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   info: TKernelInfo
@@ -17,6 +18,7 @@ export const KernelListItem = React.memo(( props: Props ) => {
   const [ isSelected, setIsSelected ] = useState(false)
   const selectedKernel = useRecoilValue(selectedKernelSelector)
   const setSelectedKernel = useSetRecoilState(selectedKernelState)
+  const { t } = useTranslation();
 
   const handleMatrixClick = useCallback(() => {
     setSelectedKernel( {info, data} )
@@ -42,7 +44,7 @@ export const KernelListItem = React.memo(( props: Props ) => {
                 key={`${i}-${j}`}
                 index={i*data.size+j}
                 isSelected={isSelected}>
-                {value}
+                { Number.isInteger(value) ? value: value.toFixed(1) }
               </M.MotionMatrixItem>
             ))}
           </S.StyledFlexMatrixHoz>
@@ -59,7 +61,7 @@ export const KernelListItem = React.memo(( props: Props ) => {
     <React.Fragment>
       <S.StyledContainer>
         <S.StyledLabelWrapper>
-          { info.label }
+          { t(`kernelinfo.${info.categoryid}.info.${info.id}.label`) }
         </S.StyledLabelWrapper>
 
         <M.MotionMatrixWrapper

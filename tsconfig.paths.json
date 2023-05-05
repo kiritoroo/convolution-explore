@@ -16,7 +16,8 @@
       "@asset/*": ["src/assets/*"],
       "@util/*": ["src/utils/*"],
       "@addon/*": ["src/addons/*"],
-      "@test/*": ["src/tests/*"]
+      "@test/*": ["src/tests/*"],
+      "@service/*": ["src/services/*"]
     }
   }
 }

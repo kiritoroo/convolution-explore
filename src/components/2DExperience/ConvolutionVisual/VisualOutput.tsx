@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { selectedImageInputSelector, selectedImageOutputSelector } from '@store/selectors';
 import { TColor } from '@type/index';
 import { colorModeState } from '@store/atoms';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
 
@@ -18,6 +19,7 @@ export const VisualOutput = React.memo(React.forwardRef<Refs, Props>(( props, re
   const imageOut = useRecoilValue(selectedImageOutputSelector);
   const imageIn = useRecoilValue(selectedImageInputSelector);
   const colorMode = useRecoilValue(colorModeState);
+  const { t } = useTranslation();
 
   const svgRef = useRef<SVGSVGElement>(null)
 
@@ -92,7 +94,7 @@ export const VisualOutput = React.memo(React.forwardRef<Refs, Props>(( props, re
 
   return (
     <S.Styledcontainer>
-      <S.StyledLabel>Image Output ({imageOut.w}x{imageOut.h})</S.StyledLabel>
+      <S.StyledLabel>{ t('showcasepage.visual.output') } ({imageOut.w}x{imageOut.h})</S.StyledLabel>
       <S.StyledImageWrapper>
         { renderedDefaultImageSVG }
       </S.StyledImageWrapper>

@@ -5,6 +5,7 @@ import { isCollapseVezKernelCategoryState, isCollapseVisualState, isFocusKernelI
 import * as S from '@style2d/KernelInfo.styled';
 import * as M from '@motion2d/KernelInfo.motion';
 import { VisualControls } from "./ConvolutionVisual/VisualControls";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 
@@ -17,6 +18,7 @@ export const KernelInfo = React.memo(( props: Props ) => {
   const [isFocusKernel, setIsFocusKernelInfo] = useRecoilState(isFocusKernelInfoState);
   const setIsRenderScene = useSetRecoilState(isRenderSceneState);
   const [isCollapseVisual, setIsCollapseVisual] = useRecoilState(isCollapseVisualState);
+  const { t } = useTranslation();
 
   const handleOnUnSelect = useCallback(() => {
     setIsRenderScene(true)
@@ -39,7 +41,7 @@ export const KernelInfo = React.memo(( props: Props ) => {
             {row.map((value: number, j: number) => (
               <S.StyledMatrixItem 
                 key={`${i}-${j}`}>
-                {value}
+                { Number.isInteger(value) ? value: value.toFixed(1) }
               </S.StyledMatrixItem>
             ))}
           </S.StyledFlexMatrixHoz>
@@ -61,10 +63,10 @@ export const KernelInfo = React.memo(( props: Props ) => {
           isCollapse={ isCollapseVisual }
           isFocusKernel={isFocusKernel}>
           <M.MotionInfoLabel>
-            { kernel.info?.label } ({kernel.data?.size}x{kernel.data?.size})
+            { t(`kernelinfo.${kernel.info?.categoryid}.info.${kernel.info?.id}.label`) } ({kernel.data?.size}x{kernel.data?.size})
           </M.MotionInfoLabel>
           <M.MotionInfoCategory>
-            { kernel.info?.categoryid }
+            { t(`kernelinfo.${kernel.info?.categoryid}.short`) }
           </M.MotionInfoCategory>
           <M.MotionMatrixWrapper
             isCollapse={ isCollapseVisual }>
@@ -72,7 +74,7 @@ export const KernelInfo = React.memo(( props: Props ) => {
           </M.MotionMatrixWrapper>
           <M.MotionInfoDescription
             isCollapse={ isCollapseVisual }>
-            { kernel.info?.description }
+            { t(`kernelinfo.${kernel.info?.categoryid}.info.${kernel.info?.id}.description`) }
           </M.MotionInfoDescription>
         </M.MotionInfoWrapper>
 

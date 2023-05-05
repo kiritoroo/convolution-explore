@@ -10,6 +10,7 @@ export const StyledContainer = styled.div`
 
 export const StyledLabelIn = styled.div`
   font-weight: 300;
+  white-space: nowrap;
 `
 
 export const StyledMatrixWrapper = styled.div`

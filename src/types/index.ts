@@ -16,7 +16,6 @@ export interface TKernelInfo {
     ksize: number,
     kmatrix: number[]
   ) => { outRGB: TColor, outGray: number };
-  params: string[]
   dataList: TKernelData[]
 }
 

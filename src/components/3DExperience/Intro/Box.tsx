@@ -47,7 +47,7 @@ export const Box = ( props: Props ) => {
 
     api.start({ scale: 0.9, position: args.position, delay: index * 10, config: { mass: 2, friction: 15 } })
 
-        api.start({ scale: 0.95, position: [(Math.random() * 10)-3, (Math.random() * 10)-3, (Math.random() * 10)-3], delay: index * 50 + 1000, config: { mass: 1, friction: 15 } })
+    api.start({ scale: 0.95, position: [(Math.random() * 10)-3, (Math.random() * 10)-3, (Math.random() * 10)-3], delay: index * 50 + 1000, config: { mass: 1, friction: 15 } })
   }, [])
   
   useEffect(() => {

@@ -9,7 +9,7 @@ import * as M from '@motion2d/Copyright.motion';
 export const Copyright = () => {
   const [isSkeleton, setIsSkeleton] = useState(true)
 
-  const i18n = useTranslation();
+  const { i18n, t} = useTranslation();
   const typewriterRef = useRef<any>(null);
   const encodeAdvisor = useRef<string>(new DOMParser().parseFromString(
     '&#x4d;&#x73;&#x2e;&#x20;&#x48;&#x6f;&#x61;&#x6e;&#x67;&#x20;&#x56;&#x61;&#x6e;&#x20;&#x44;&#x75;&#x6e;&#x67;', 'text/html').body.textContent);
@@ -21,15 +21,15 @@ export const Copyright = () => {
   const createTypeWriterEffect = useCallback((scope: TypewriterClass) => {
     scope
       .changeDelay(20)
-      .typeString(`${i18n.t("logo.advisor")}: ${ encodeAdvisor.current }`)
+      .typeString(`${t("intropage.copyright.advisor")}: ${ encodeAdvisor.current }`)
       .pauseFor(3000).deleteAll()
       .changeDelay(20)
-      .typeString(`${i18n.t("logo.developer")}: ${ encodeDev1.current }`)
+      .typeString(`${t("intropage.copyright.dev")}: ${ encodeDev1.current }`)
       .pauseFor(1500).deleteAll()
       .changeDelay(20)
-      .typeString(`${i18n.t("logo.developer")}: ${ encodeDev2.current }`)
+      .typeString(`${t("intropage.copyright.dev")}: ${ encodeDev2.current }`)
       .pauseFor(1500).deleteAll()
-      .typeString(`${i18n.t("caption.top")} ${i18n.t("caption.bottom")}`)
+      .typeString(`${t("intropage.copyright.title")}`)
       .start()
   }, [])
 
@@ -48,7 +48,7 @@ export const Copyright = () => {
     if (typewriterRef.current) {
       handleResetTypeWriter(typewriterRef.current)
     }
-  }, [i18n.i18n.language, typewriterRef])
+  }, [i18n.language, typewriterRef])
 
   useEffect(() => {
     setTimeout(() => {
@@ -71,7 +71,7 @@ export const Copyright = () => {
           </M.MotionSkeletonWrapper>
         </SkeletonTheme> : 
         <M.MotionContentWrapper>
-        <div> HCMUTE University </div>
+        <div>{t('intropage.copyright.uni')}</div>
         <Typewriter
           onInit={(typewriter) => handleInitTypeWriter(typewriter)}
           options={{ autoStart: true, loop: true, cursor: '.' }}/>

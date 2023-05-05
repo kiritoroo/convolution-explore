@@ -22,7 +22,7 @@ interface IContainerProps {
 export const MotionContainer: React.FC<IContainerProps> = React.memo(( props ) => {
   const { children, onMouseEnter, onMouseLeave } = props
 
-  const transiton = useRef<Transition>({
+  const transition = useRef<Transition>({
     duration: 0.5, ease: "easeInOut"
   })
 
@@ -37,7 +37,7 @@ export const MotionContainer: React.FC<IContainerProps> = React.memo(( props ) =
       onMouseEnter={ onMouseEnter }
       onMouseLeave={ onMouseLeave }
       variants={ variants.current }
-      transition={ transiton.current }
+      transition={ transition.current }
       initial="hidden"
       animate="enter"
       exit="exit"

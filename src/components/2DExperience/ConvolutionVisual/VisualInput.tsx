@@ -4,6 +4,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import * as S from '@style/2DExperience/ConvolutionVisual/VisualInput.styled';
 import { TColor } from "@type/index";
 import { colorModeState, cursorVariantState, selectedImageInfoState } from "@store/atoms";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 
@@ -19,6 +20,7 @@ export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref
   const setCursorVariant = useSetRecoilState(cursorVariantState);
   const selectedImageInfo = useRecoilValue(selectedImageInfoState);
   const colorMode = useRecoilValue(colorModeState);
+  const { t } = useTranslation();
 
   const svgRef = useRef<SVGSVGElement>(null)
 
@@ -81,13 +83,13 @@ export const VisualInput = React.memo(React.forwardRef<Refs, Props>(( props, ref
 
   return (
     <S.StyledContaier>
-      <S.StyledLabel>Image Input ({imageIn.w}x{imageIn.h})</S.StyledLabel>
+      <S.StyledLabel>{ t('showcasepage.visual.input') } ({imageIn.w}x{imageIn.h})</S.StyledLabel>
       <S.StyledImageWrapper
         onMouseEnter={ handleMouseEnter }
         onMouseLeave={ handleMouseLeave }>
         { renderedImageSVG }
         <S.StyledImageInfo>
-          Art by: {selectedImageInfo.by}
+        { t('showcasepage.visual.artby') }: {selectedImageInfo.by}
         </S.StyledImageInfo>
       </S.StyledImageWrapper>
     </S.StyledContaier>

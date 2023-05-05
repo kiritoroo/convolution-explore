@@ -6,6 +6,7 @@ import { VisualProcess } from './VisualProcess';
 import { useRecoilValue } from 'recoil';
 import { selectedImageInputSelector, selectedImageOutputSelector, selectedKernelSelector } from '@store/selectors';
 import { colorModeState, isPaddingModeState } from '@store/atoms';
+import { useTranslation } from 'react-i18next';
 interface Props {
 
 }
@@ -27,6 +28,7 @@ interface VisualProcessRefs {
 
 export const VisualControls = React.memo((props: Props) => {
   const [isPending, startTransition] = useTransition();
+  const { t } = useTranslation();
 
   const kernel = useRecoilValue(selectedKernelSelector);  
   const imageIn = useRecoilValue(selectedImageInputSelector);
@@ -194,7 +196,7 @@ export const VisualControls = React.memo((props: Props) => {
   return (
     <S.StyledContainer>
       <S.StyledLabel>
-        Convolution
+        { t('showcasepage.visual.title') }
       </S.StyledLabel>
       <S.StyledVisualWrapper>
         <VisualInput ref={ visualInputRef }/>
@@ -202,7 +204,7 @@ export const VisualControls = React.memo((props: Props) => {
         <VisualOutput ref={ visualOutputRef }/>
       </S.StyledVisualWrapper>
       <S.StyledHint>
-        Hover over the matries to change kernel position
+        { t('showcasepage.visual.hint') }
       </S.StyledHint> 
     </S.StyledContainer>
   )

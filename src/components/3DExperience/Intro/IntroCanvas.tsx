@@ -11,11 +11,13 @@ import { LoadingBox } from '@comp/2DExperience/LoadingBox';
 import { Suspense, useCallback } from "react"
 import { isLoadingState } from "@store/atoms"
 import { useSetRecoilState } from "recoil"
+import { useTranslation } from "react-i18next"
 
 interface Props {}
 
 export const IntroCanvas = ( props: Props) => {
   const setIsLoading = useSetRecoilState(isLoadingState)
+  const { t } = useTranslation();
 
   const handleLoaded = useCallback(() => {
     setTimeout(() => {
@@ -30,7 +32,7 @@ export const IntroCanvas = ( props: Props) => {
         <color attach="background" args={['#f0f0f0']} />
           <hemisphereLight intensity={0.5} groundColor="black" />
 
-          <Caption args={{ position: [0,0,-5], rotation: [0,0,0] }}>{`CONVOLUTION\nEXPLORE.`}</Caption>
+          <Caption args={{ position: [0,0,-5], rotation: [0,0,0] }}>{t('intropage.title')}</Caption>
 
           { Array.from({ length: 10 }, (_, i) => <Matrix key={i} />) }
 

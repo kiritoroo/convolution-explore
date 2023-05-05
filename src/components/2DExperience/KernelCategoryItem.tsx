@@ -14,6 +14,7 @@ import {
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import * as S from '@style2d/KernelCategoryItem.styled';
 import * as M from '@motion2d/KernelCategoryItem.motion';
+import { useTranslation } from "react-i18next";
 
 type TCategoryIconMap = {
   [key: string]: React.ReactNode;
@@ -31,8 +32,8 @@ export const KernelCategoryItem = React.memo(( props: Props ) => {
   const isCollapseHoz = useRecoilValue(isCollapseHozKernelCategoryState)
   const selectedCategory = useRecoilValue(selectedCategorySelector);
   const setSelectedCategory = useSetRecoilState(selectedCategoryState);
-
   const [isPending, startTransition] = useTransition();
+  const { t } = useTranslation();
 
   const categoryIconMap = useMemo<TCategoryIconMap>(() => ({
     filtering: <BiFilterAlt size={'1.5em'} color='#A882FA'/>,
@@ -81,7 +82,7 @@ export const KernelCategoryItem = React.memo(( props: Props ) => {
             <M.MotionLabelWrapper
               isCollapseHoz={isCollapseHoz}
               maxLength={maxLengthLabel}>
-              { categoryData.label }
+              { t(`kernelinfo.${categoryData.id}.label`) }
             </M.MotionLabelWrapper>
           </S.StyledFlexChild>
           <M.MotionCountWrapper

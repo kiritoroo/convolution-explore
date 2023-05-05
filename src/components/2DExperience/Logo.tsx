@@ -6,6 +6,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { cursorVariantState, isLoadingState } from "@store/atoms";
 import * as S from '@style2d/Logo.styled';
 import * as M from '@motion2d/Logo.motion';
+import { useTranslation } from "react-i18next";
 
 interface Props {
 
@@ -13,8 +14,10 @@ interface Props {
 
 export const Logo = ( props: Props ) => {
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
-
-  const text = useRef<string>('Convolution')
+  const { t, i18n } = useTranslation();
+  const text = useMemo<string>(() => (
+    t('navbar.title')
+  ), [i18n.language])
 
   const animCtrl = useAnimation();
   const navigate = useNavigate();
@@ -47,10 +50,10 @@ export const Logo = ( props: Props ) => {
 
   useEffect(() => {
     handleLoading(isLoading);
-  }, [isLoading]);
+  }, [isLoading, text]);
 
   const createCharacters = useCallback((content: string) => {
-    return text.current.split(" ").map((word, index) => (
+    return content.split(" ").map((word, index) => (
       <M.MotionWord
         key={ index }
         animCtrl={ animCtrl }
@@ -63,11 +66,11 @@ export const Logo = ( props: Props ) => {
         ))}
       </M.MotionWord>
     ))
-  }, [])
+  }, [animCtrl])
 
   const renderedCharacters = useMemo<JSX.Element[]>(() => {
-    return createCharacters(text.current);
-  }, [text.current])
+    return createCharacters(text);
+  }, [text])
 
   return (
     <React.Fragment>

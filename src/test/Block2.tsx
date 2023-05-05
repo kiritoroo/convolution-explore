@@ -73,7 +73,7 @@ export const Block = ( props: Props ) => {
             material-toneMapped={false}
             anchorX="center"
             anchorY="middle">
-            { value }
+            { Number.isInteger(value) ? value: value.toFixed(1) }
           </Text>
           <mesh
             geometry={geometry}

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useImperativeHandle, useCallback, useMemo } f
 import * as S from '@style2d/ConvolutionVisual/VisualProcess.styled';
 import { useRecoilValue } from "recoil";
 import { selectedKernelSelector } from "@store/selectors";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 
@@ -14,6 +15,7 @@ interface Refs {
 
 export const VisualProcess = React.memo(React.forwardRef<Refs, Props>(( props, ref ) => {
   const kernel = useRecoilValue(selectedKernelSelector);
+  const { t } = useTranslation();
 
   const matrixRef = useRef<HTMLDivElement>(null)
   const outValueRef = useRef<HTMLDivElement>(null)
@@ -38,7 +40,7 @@ export const VisualProcess = React.memo(React.forwardRef<Refs, Props>(( props, r
             <S.StyledMatrixItem key={`${i}-${j}`}>
               <S.StyledInputValue></S.StyledInputValue>
               <S.StyledKernelValue>
-                {kernel.matrix1D[i*kernel.data!.size+j]}
+                { Number.isInteger(kernel.matrix1D[i*kernel.data!.size+j]) ? kernel.matrix1D[i*kernel.data!.size+j]: kernel.matrix1D[i*kernel.data!.size+j].toFixed(1) }
               </S.StyledKernelValue>
             </S.StyledMatrixItem>
           ))}
@@ -54,7 +56,7 @@ export const VisualProcess = React.memo(React.forwardRef<Refs, Props>(( props, r
 
   return (
     <S.StyledContainer>
-      <S.StyledLabelIn>Window Slice ({kernel.data?.size}x{kernel.data?.size})</S.StyledLabelIn>
+      <S.StyledLabelIn>{ t('showcasepage.visual.process') } ({kernel.data?.size}x{kernel.data?.size})</S.StyledLabelIn>
       <S.StyledMatrixWrapper>
         { renderedDefaultMatrix }
       </S.StyledMatrixWrapper>

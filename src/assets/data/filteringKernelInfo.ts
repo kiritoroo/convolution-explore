@@ -25,10 +25,6 @@ export const filteringKernelInfo: TKernelInfo[] = [
 
       return { outRGB: outRGB, outGray: outGray }
     },
-    params: [
-      'src: Input Image',
-      'ksize: Kernel size, it is an odd number'
-    ],
     dataList: filteringKernelData.filter(data => data.id === 'gaussian')!
   },
   {
@@ -53,10 +49,6 @@ export const filteringKernelInfo: TKernelInfo[] = [
 
       return { outRGB: outRGB, outGray: outGray }
     },
-    params: [
-      'src: Input Image',
-      'ksize: Kernel size, it is an odd number'
-    ],
     dataList: filteringKernelData.filter(data => data.id === 'averaging')!
   },
   {
@@ -75,9 +67,42 @@ export const filteringKernelInfo: TKernelInfo[] = [
 
       return { outRGB: outRGB, outGray: outGray }
     },  
-    params: [
-   
-    ],
     dataList: filteringKernelData.filter(data => data.id === 'median')!
+  },
+  {
+    id: 'min',
+    categoryid: 'filtering',
+    label: 'Min Kernel',
+    description: 'A min kernel is a type of spatial filter used in image processing to perform morphological operations such as erosion. It works by replacing each pixel in an image with the minimum value in its neighborhood defined by a kernel, which is a small matrix of values. The size of the kernel determines the size of the neighborhood used for the operation. The min kernel is useful for removing small details or noise in an image, as it reduces the intensity of bright pixels and fills in small gaps in the image.',
+    func: (windSliceRed: number[], windSliceGreen: number[], windSliceBlue: number[], ksize: number, kmatrix: number[]): { outRGB: TColor, outGray: number } => {
+      const outRGB: TColor = {
+        r: Math.min(...windSliceRed),
+        g: Math.min(...windSliceGreen),
+        b: Math.min(...windSliceBlue),
+      }
+      
+      const outGray: number = ImageUtils.rgb2Gray( outRGB.r, outRGB.g, outRGB.b )
+
+      return { outRGB: outRGB, outGray: outGray }
+    },  
+    dataList: filteringKernelData.filter(data => data.id === 'min')!
+  },
+  {
+    id: 'max',
+    categoryid: 'filtering',
+    label: 'Max Kernel',
+    description: 'The max kernel, also known as dilation kernel, is a morphological operation in image processing used to enlarge the boundaries of regions of foreground pixels. It replaces each pixel in the image with the maximum pixel value within the kernel size neighborhood centered at that pixel. The resulting image will have thicker and more pronounced edges and borders.',
+    func: (windSliceRed: number[], windSliceGreen: number[], windSliceBlue: number[], ksize: number, kmatrix: number[]): { outRGB: TColor, outGray: number } => {
+      const outRGB: TColor = {
+        r: Math.max(...windSliceRed),
+        g: Math.max(...windSliceGreen),
+        b: Math.max(...windSliceBlue),
+      }
+      
+      const outGray: number = ImageUtils.rgb2Gray( outRGB.r, outRGB.g, outRGB.b )
+
+      return { outRGB: outRGB, outGray: outGray }
+    },  
+    dataList: filteringKernelData.filter(data => data.id === 'max')!
   }
 ]

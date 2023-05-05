@@ -70,7 +70,7 @@ export const KernelBlock = React.memo((props: Props) => {
       font="/fonts/Ki-Medium.ttf" fontSize={0.4}
       color={ '#ffffff' } material-toneMapped={false}
       anchorX="center" anchorY="middle">
-      { value }
+      { Number.isInteger(value) ? value: value.toFixed(1) }
     </Text>
   ), [value])
 

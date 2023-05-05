@@ -54,7 +54,7 @@ export const Caption = (props: Props) => {
     <Text
       { ...args }
       lineHeight={1}
-      font="/fonts/futura/SFUFuturaRegular.TTF"
+      font="/fonts/NotoSansJP-300.ttf"
       fontSize={width / 8}
       material-toneMapped={false}
       anchorX="center"
