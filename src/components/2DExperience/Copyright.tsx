@@ -12,7 +12,7 @@ export const Copyright = () => {
   const { i18n, t} = useTranslation();
   const typewriterRef = useRef<any>(null);
   const encodeAdvisor = useRef<string>(new DOMParser().parseFromString(
-    '&#x4d;&#x73;&#x2e;&#x20;&#x48;&#x6f;&#x61;&#x6e;&#x67;&#x20;&#x56;&#x61;&#x6e;&#x20;&#x44;&#x75;&#x6e;&#x67;', 'text/html').body.textContent);
+    '&#x4D;&#x72;&period;&#x20;&#x48;&#x6F;&#x61;&#x6E;&#x67;&#x20;&#x56;&#x61;&#x6E;&#x20;&#x44;&#x75;&#x6E;&#x67;', 'text/html').body.textContent);
   const encodeDev1 = useRef<string>(new DOMParser().parseFromString(
     '&#x4b;&#x69;&#x65;&#x6e;&#x20;&#x54;&#x72;&#x75;&#x6e;&#x67;', 'text/html').body.textContent);
   const encodeDev2 = useRef<string>(new DOMParser().parseFromString(
