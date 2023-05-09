@@ -13,7 +13,6 @@ export const StyledContainer = styled.div`
 `
 
 export const StyledWord = styled(motion.span)`
-
   display: inline-block;
   font-size: 2em;
 `

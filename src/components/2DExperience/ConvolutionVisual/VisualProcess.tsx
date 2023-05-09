@@ -34,18 +34,18 @@ export const VisualProcess = React.memo(React.forwardRef<Refs, Props>(( props, r
   const createDefaultMatrix = useCallback(() => {
     return (
       <S.StyledFlexMatrixVez ref={ matrixRef }>
-      {Array.from({ length: kernel.data!.size }, (_, i) => (
-        <S.StyledFlexMatrixHoz key={i}>
-          {Array.from({ length: kernel.data!.size }, (_, j) => (
-            <S.StyledMatrixItem key={`${i}-${j}`}>
-              <S.StyledInputValue></S.StyledInputValue>
-              <S.StyledKernelValue>
-                { Number.isInteger(kernel.matrix1D[i*kernel.data!.size+j]) ? kernel.matrix1D[i*kernel.data!.size+j]: kernel.matrix1D[i*kernel.data!.size+j].toFixed(1) }
-              </S.StyledKernelValue>
-            </S.StyledMatrixItem>
-          ))}
-        </S.StyledFlexMatrixHoz>
-      ))}
+        {Array.from({ length: kernel.data!.size }, (_, i) => (
+          <S.StyledFlexMatrixHoz key={i}>
+            {Array.from({ length: kernel.data!.size }, (_, j) => (
+              <S.StyledMatrixItem key={`${i}-${j}`}>
+                <S.StyledInputValue></S.StyledInputValue>
+                <S.StyledKernelValue>
+                  { Number.isInteger(kernel.matrix1D[i*kernel.data!.size+j]) ? kernel.matrix1D[i*kernel.data!.size+j]: kernel.matrix1D[i*kernel.data!.size+j].toFixed(1) }
+                </S.StyledKernelValue>
+              </S.StyledMatrixItem>
+            ))}
+          </S.StyledFlexMatrixHoz>
+        ))}
       </S.StyledFlexMatrixVez>
     )
   }, [kernel])

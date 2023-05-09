@@ -29,7 +29,7 @@ export interface TKernelData {
 export interface TAsset {
   name: string
   by: string
-  type: 'image'
+  type: 'image' | 'texture'
   path: string
 }
 
@@ -44,4 +44,10 @@ export interface TColor {
   r: number,
   g: number,
   b: number
+}
+
+export interface ISpeedInfo {
+  id: string
+  label: string
+  speed: number
 }

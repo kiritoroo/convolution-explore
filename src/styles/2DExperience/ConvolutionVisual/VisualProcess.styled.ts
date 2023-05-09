@@ -39,6 +39,7 @@ export const StyledMatrixItem = styled.div`
   justify-content: center;
   align-items: center;
 `
+
 export const StyledKernelValue = styled.div`
   width: 40px;
   height: 15px;

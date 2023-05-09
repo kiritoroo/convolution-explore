@@ -81,7 +81,7 @@ export const StyledItem = styled(motion.li)`
     background-color: #EDE6FD;
   }
 
-  &.active {
-    background-color: #F9E2FF;
+  &:active {
+    background-color: #DBCBFD;
   }
 `

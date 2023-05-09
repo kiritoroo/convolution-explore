@@ -23,7 +23,7 @@ class Resources {
 
   private async preload(): Promise<void> {
     for (const asset of this.assets) {
-      if (asset.type === 'image') {
+      if (asset.type === 'image' || 'texture') {
         await this.loader.loaderTexture(asset.path).then((result) => {
           this.save(asset, result);
         })

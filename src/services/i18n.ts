@@ -14,7 +14,7 @@ i18next
     interpolation: {
       escapeValue: false
     },
-    debug: true
+    debug: false
   })
 
 export default i18next;

@@ -32,7 +32,7 @@ export const LanguageSwitcher = () => {
   const handleMouseEnter = useCallback(() => {
     timeOutIds.forEach((id) => clearTimeout(id))
     setIsOpen(true)
-  }, [])
+  }, [timeOutIds])
 
   const handleMouseLeave = useCallback(() => {
     timeOutIds.push(setTimeout(() => {
@@ -40,7 +40,7 @@ export const LanguageSwitcher = () => {
         setIsOpen(false)
       }
     }, 500))
-  }, [])
+  }, [isOpen, timeOutIds])
 
   const handleChangeLocale = useCallback((locale: string) => {
     setIsLoading(true)

@@ -8,6 +8,7 @@ import { selectedImageInputSelector, selectedImageOutputSelector, selectedKernel
 import { colorModeState, isPaddingModeState } from '@store/atoms';
 import { useTranslation } from 'react-i18next';
 import { BiPlayCircle, BiRefresh } from 'react-icons/bi';
+import { TColor } from '@type/index';
 
 interface Props {
 
@@ -56,10 +57,12 @@ export const VisualControls = React.memo((props: Props) => {
   const windowSliceInColorRed = useRef<number[]>([]);
   const windowSliceInColorGreen = useRef<number[]>([]);
   const windowSliceInColorBlue = useRef<number[]>([]);
+  const windowSliceInRGB = useRef<TColor[]>([]);
   const windowSliceInGray = useRef<number[]>([]);
   const windowSliceOutColorRed = useRef<number>();
   const windowSliceOutColorGreen = useRef<number>();
   const windowSliceOutColorBlue = useRef<number>();
+  const windowSliceOutRGB = useRef<TColor>();
   const windowSliceOutGray = useRef<number>();
 
   const clearWindowInSlice = useCallback(() => {
@@ -97,6 +100,7 @@ export const VisualControls = React.memo((props: Props) => {
     windowSliceInColorRed.current = [];
     windowSliceInColorGreen.current = [];
     windowSliceInColorBlue.current = [];
+    windowSliceInRGB.current = [];
     windowSliceInGray.current = [];
 
     for (let ky=0; ky < kernel.data!.size; ky++) {
@@ -108,6 +112,7 @@ export const VisualControls = React.memo((props: Props) => {
         windowSliceInColorRed.current.push(imageIn.cRed1d[indexIn1d]);
         windowSliceInColorGreen.current.push(imageIn.cGreen1d[indexIn1d]);
         windowSliceInColorBlue.current.push(imageIn.cBlue1d[indexIn1d]);
+        windowSliceInRGB.current.push(imageIn.rgb1d[indexIn1d]);
         windowSliceInGray.current.push(imageIn.gray1d[indexIn1d]);
       }
     }
@@ -118,6 +123,7 @@ export const VisualControls = React.memo((props: Props) => {
     windowSliceOutColorRed.current = undefined;
     windowSliceOutColorGreen.current = undefined;
     windowSliceOutColorBlue.current = undefined;
+    windowSliceOutRGB.current = undefined;
     windowSliceOutGray.current = undefined;
 
     let indexOut2D
@@ -134,6 +140,7 @@ export const VisualControls = React.memo((props: Props) => {
     windowSliceOutColorRed.current = imageOut.rgb1dOut[indexOut1d].r;
     windowSliceOutColorGreen.current = imageOut.rgb1dOut[indexOut1d].g;
     windowSliceOutColorBlue.current = imageOut.rgb1dOut[indexOut1d].b;
+    windowSliceOutRGB.current = imageOut.rgb1dOut[indexOut1d];
     windowSliceOutGray.current = imageOut.gray1dOut[indexOut1d];
 
     windowSliceOutRect.current.setAttribute("fill", colorMode == 'rgb'

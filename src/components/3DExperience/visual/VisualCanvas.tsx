@@ -1,11 +1,13 @@
 import { Canvas } from "@react-three/fiber"
 import * as S from '@style/3DExperience/VisualCanvas.styled'
 import { OrbitControls } from "@react-three/drei"
-import { Background } from "../core/Background"
+import { Background } from "./Background"
 import { Env } from "../core/Env"
 import { isLoadingState } from "@store/atoms"
-import { useSetRecoilState } from "recoil"
-import { useCallback } from "react"
+import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useCallback, useLayoutEffect, useTransition } from "react"
+import { Ground } from "./Ground"
+import { VisualControls } from "./VisualControls"
 
 interface Props {}
 
@@ -20,14 +22,17 @@ export const VisualCanvas = ( props: Props) => {
 
   return (
     <S.StyledContainer>
-      <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 22 }}>
+      <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 150], fov: 22 }}>
         <group onUpdate={handleLoaded}>
           <color attach="background" args={['#f0f0f0']} />
-          <hemisphereLight intensity={0.5} groundColor="black" />
-
-          <Env/>
-          <Background/>
+          <ambientLight intensity={0.85} />
+          <directionalLight position={[150, 150, 150]} intensity={1} />
           
+          <VisualControls/>
+          <Env/>
+          {/* <Ground/> */}
+          <Background/>
+
           <OrbitControls enableDamping={true}/>
         </group>
       </Canvas>

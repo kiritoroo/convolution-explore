@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { TKernelCategory, TKernelData, TKernelInfo } from "@type/index";
+import { ISpeedInfo, TKernelCategory, TKernelData, TKernelInfo } from "@type/index";
 import * as THREE from 'three'
 
 export const isLoadingState = atom({
@@ -95,7 +95,32 @@ export const isPaddingModeState = atom<boolean>(({
   default: false
 }))
 
+export const interactiveModeState = atom<string>({
+  key: 'interactiveModeState',
+  default: 'animate'
+})
+
 export const isCollapseVisualState = atom<boolean>(({
   key: 'isCollapseVisualState',
   default: true
+}))
+
+export const selectedAnimSpeedState = atom<ISpeedInfo | null>(({
+  key: 'selectedAnimSpeedState',
+  default: null
+}))
+
+export const isSnapKernelState = atom<boolean>(({
+  key: 'isSnapKernelState',
+  default: false
+}))
+
+export const isPlayAnimConvolutionState = atom<boolean>(({
+  key: 'isPlayAnimConvolutionState',
+  default: false
+}))
+
+export const isResetAnimConvolutionState = atom<boolean>(({
+  key: 'isResetAnimConvolutionState',
+  default: false
 }))

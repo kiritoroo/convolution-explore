@@ -42,11 +42,13 @@ export const kernelCategoryDataSelector = selector({
       dataCountById[categoryId] = dataCount;
     }) ?? {}
 
+    const infoList: TKernelInfo[] = []
     const infoListByCategory: Record<string, TKernelInfo[]> = {};
     categoryList?.forEach(category => {
       const categoryId = category.id
-      const infoList = category.infoList
-      infoListByCategory[categoryId] = infoList
+      const _infoList = category.infoList
+      infoList.push(...category.infoList)
+      infoListByCategory[categoryId] = _infoList
     }) ?? {}
 
     const dataListByCategory: Record<string, TData[]> = {};
@@ -127,6 +129,7 @@ export const kernelCategoryDataSelector = selector({
 
     return {
       categoryList,
+      infoList,
       dataCount,
       dataCountById,
       dataListBySize,
@@ -293,7 +296,7 @@ export const selectedImageInputSelector = selector(({
     }
 
     const rgba2d: TColorAlpha[][] = []
-    const rgb1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount*3)
+    const rgb1d: TColor[] = []
     const rgb2d: TColor[][] = []
     const cRed1d: Uint8ClampedArray = new Uint8ClampedArray(pixelCount);
     const cRed2d: number[][] = []
@@ -323,6 +326,7 @@ export const selectedImageInputSelector = selector(({
         rgba1d[index1d * 3] = _r;
         rgba1d[index1d * 3 + 1] = _g;
         rgba1d[index1d * 3 + 2] = _b;
+        rgb1d[index1d] = { r: _r, g: _g, b: _b }
         cRed1d[index1d] = _r;
         cGreen1d[index1d] = _g;
         cBlue1d[index1d] = _b;

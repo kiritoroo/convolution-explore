@@ -31,7 +31,7 @@ export const ImageList = React.memo(( props: Props ) => {
   }, [])
 
   const createImageListItem = useCallback(() => {
-    return assets.map((item, index) => (
+    return assets.filter(item => item.type === 'image').map((item, index) => (
       <M.MotionImageWrapper
         onClick={ () => handleSelectImage(item.name, item.by) }
         key={ index }>
