@@ -1,0 +1,118 @@
+{
+  "locale": {
+    "en": {
+      "lang": "English",
+      "short": "EN"
+    },
+    "ja": {
+      "lang": "Japanese",
+      "short": "JP"
+    }
+  },
+  "navbar": {
+    "title": "Convolution",
+    "showcase": "Kernels Showcase",
+    "visual": "Visualization"
+  },
+  "intropage": {
+    "title": "CONVOLUTION\nEXPLORE.",
+    "copyright": {
+      "uni": "HCMUTE University",
+      "advisor": "Project Advisor",
+      "dev": "Developer",
+      "title": "Convolution Explore"
+    }
+  },
+  "showcasepage": {
+    "visual": {
+      "title": "Convolution",
+      "input": "Image Input",
+      "process": "Window Slice",
+      "output": "Image Output",
+      "hint": "Hover over the matries to change kernel position",
+      "artby": "Art by"
+    }
+  },
+  "kernelinfo": {
+    "filtering": {
+      "label": "Filtering Kernels",
+      "short": "filtering",
+      "info": {
+        "gaussian": {
+          "label": "Gaussian Kernel",
+          "description": "Gaussian kernel: A kernel used for smoothing or blurring images. It is based on the Gaussian distribution and works by convolving each pixel in an image with a kernel matrix that contains values calculated using the Gaussian function. The resulting image has a smoother appearance and can be used for noise reduction, edge detection, and other image processing tasks."
+        },
+        "averaging": {
+          "label": "Averaging Kernel",
+          "description": "Averaging kernel: A kernel used for simple image smoothing or blurring. It is also called a box filter because the kernel has a rectangular shape with all values set to 1. The kernel is applied to each pixel in the image by computing the average of the pixel values in the kernel neighborhood. The resulting image has reduced high-frequency noise and small details, but may also have reduced contrast and sharpness."
+        },
+        "median": {
+          "label": "Median Kernel",
+          "description": "Median kernel: A kernel used for image denoising or smoothing. It replaces each pixel in the image with the median value of its neighboring pixels. The median filter is useful for removing salt-and-pepper noise, which is a type of noise that appears as white or black pixels scattered randomly throughout the image. The median kernel is robust to outliers and preserves edges and details better than other smoothing filters."
+        },
+        "min": {
+          "label": "Min Kernel",
+          "description": "A min kernel is a type of spatial filter used in image processing to perform morphological operations such as erosion. It works by replacing each pixel in an image with the minimum value in its neighborhood defined by a kernel, which is a small matrix of values. The size of the kernel determines the size of the neighborhood used for the operation. The min kernel is useful for removing small details or noise in an image, as it reduces the intensity of bright pixels and fills in small gaps in the image."
+        },
+        "max": {
+          "label": "Max Kernel",
+          "description": "The max kernel, also known as dilation kernel, is a morphological operation in image processing used to enlarge the boundaries of regions of foreground pixels. It replaces each pixel in the image with the maximum pixel value within the kernel size neighborhood centered at that pixel. The resulting image will have thicker and more pronounced edges and borders."
+        }
+      }
+    },
+    "edge": {
+      "label": "Edge Kernels",
+      "short": "edge",
+      "info": {
+        "sobel-gx": {
+          "label": "Sobel Gx Kernel",
+          "description": "Sobel kernel includes Sobel X and Sobel Y, designed to detect edges in the horizontal and vertical orientation of an image."
+        },
+        "sobel-gy": {
+          "label": "Sobel Gy Kernel",
+          "description": "Sobel kernel includes Sobel X and Sobel Y, designed to detect edges in the horizontal and vertical orientation of an image."
+        },
+        "laplacian": {
+          "label": "Laplacian Kernel",
+          "description": "The Laplacian kernel is a type of image filter used in computer vision and image processing. It is a second derivative operator that highlights regions of rapid intensity change in an image, such as edges, corners, and other features."
+        },
+        "freichen-gx": {
+          "label": "Frei - Chen Gx Kernel",
+          "description": "Frei-Chen kernel is a type of filter used for detecting edges in images. It consists of two separate kernels, Gx and Gy, which are applied separately to the image to detect edges in the horizontal and vertical directions. These kernels are designed to calculate the gradient of the image by detecting changes in pixel values."
+        },
+        "freichen-gy": {
+          "label": "Frei - Chen Gy Kernel",
+          "description": "Frei-Chen kernel is a type of filter used for detecting edges in images. It consists of two separate kernels, Gx and Gy, which are applied separately to the image to detect edges in the horizontal and vertical directions. These kernels are designed to calculate the gradient of the image by detecting changes in pixel values."
+        }
+      }
+    },
+    "intensity": {
+      "label": "Intensity Kernels",
+      "short": "intensity",
+      "info": {
+        "linear-constrast": {
+          "label": "Linear Constrast Kernel",
+          "description": "The Linear-contrast kernel is a type of filter used in image processing to enhance the contrast of an image. It works by applying a linear transformation to the pixel values, stretching the intensity range of the image to make it more visually appealing. The kernel is often used in applications where the original image has low contrast or where features are hard to distinguish."
+        }
+      }
+    },
+    "enhancement": {
+      "label": "Enhancement Kernels",
+      "short": "enhancement",
+      "info": {
+        "sharpen1": {
+          "label": "Sharpen Kernel 1",
+          "description": "A sharpen kernel is a type of image filter used to enhance the edges and details in an image by increasing the contrast between neighboring pixels. It works by subtracting a blurred version of the image from the original image, which emphasizes the high-frequency components of the image."
+        },
+        "sharpen2": {
+          "label": "Sharpen Kernel 2",
+          "description": "A sharpen kernel is a type of image filter used to enhance the edges and details in an image by increasing the contrast between neighboring pixels. It works by subtracting a blurred version of the image from the original image, which emphasizes the high-frequency components of the image."
+        },
+        "sharpen3": {
+          "label": "Sharpen Kernel 3",
+          "description": "A sharpen kernel is a type of image filter used to enhance the edges and details in an image by increasing the contrast between neighboring pixels. It works by subtracting a blurred version of the image from the original image, which emphasizes the high-frequency components of the image."
+        }
+      }
+    }
+  }
+}
