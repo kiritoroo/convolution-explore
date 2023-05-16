@@ -52,7 +52,7 @@ export const App = () => {
           <Route path="/" element={<IntroPage/>}/>
           <Route path="/showcase" element={<ShowcasePage/>}/>
           <Route path="/visual" element={<VisualPage/>}/>
-        </Routes>
+        </Routes> 
       </HashRouter>
     </React.Fragment>
   )
