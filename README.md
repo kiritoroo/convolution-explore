@@ -1,10 +1,10 @@
 ## Convolution Visualization & Simulation
 
-### Website: https://kiritoroo.github.io/convolution-explore/
-### Github Repository: https://github.com/kiritoroo/convolution-explore
+### Live: https://convolution-explore.vercel.app/
+### Repository: https://github.com/kiritoroo/convolution-explore
 
 ## Project Advisor
- - > [Thầy Hoàng Văn Dũng]()
+ - > [Mr Hoàng Văn Dũng]()
 
 ## Authors
  - > [Kien Trung](https://github.com/kiritoroo) 
