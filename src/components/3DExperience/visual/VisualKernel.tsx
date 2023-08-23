@@ -9,7 +9,7 @@ import { WindowInput } from './VisualContent/WindowInput';
 import { SnapInput } from './VisualContent/SnapInput';
 import { TColor } from '@type/index';
 
-useLoader.preload(THREE.TextureLoader,"./src/assets/images/tex-border.png");
+useLoader.preload(THREE.TextureLoader,"/images/tex-border.png");
 
 interface Props {
   snapInRGb: TColor[]
@@ -55,7 +55,7 @@ export const VisualKernel = React.memo(React.forwardRef<Refs, Props>(( props, re
   }))
 
   const snapGeometry = useRef<THREE.BoxGeometry>(new THREE.BoxGeometry(0.99, 0.99, 1.05));
-  const snapTexture = useLoader(THREE.TextureLoader, "./src/assets/images/tex-border.png");
+  const snapTexture = useLoader(THREE.TextureLoader, "images/tex-border.png");
   const snapMaterial = useMemo<THREE.MeshBasicMaterial>(() => (new THREE.MeshBasicMaterial({
     map: snapTexture ?? null,
     color: new THREE.Color(0xffffff),
