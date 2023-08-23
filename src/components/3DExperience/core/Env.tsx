@@ -4,7 +4,7 @@ export const Env = () => {
   return (
     <Environment
       resolution={64}
-      preset={'sunset'}
+      files="/textures/venice_sunset_1k.hdr"
       blur={0.65}
       background>
       <group rotation={[-Math.PI / 4, -0.3, 0]}>

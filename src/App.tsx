@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { kernelCategory as data } from "@asset/data/kernelCategory";
 import { isLoadingResourcesState, isLoadingState, kernelCategoryDataState, resourcesState } from '@store/atoms'
-import { Routes, Route, HashRouter } from "react-router-dom"
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom"
 import IntroPage from './pages/IntroPage';
 import ShowcasePage from './pages/ShowcasePage';
 import VisualPage from './pages/VisualPage';
@@ -47,13 +47,13 @@ export const App = () => {
         { !isLoading && <Cursor/> }
       </AnimatePresence>
 
-      <HashRouter>
+      <Router>
         <Routes>
           <Route path="/" element={<IntroPage/>}/>
           <Route path="/showcase" element={<ShowcasePage/>}/>
           <Route path="/visual" element={<VisualPage/>}/>
         </Routes> 
-      </HashRouter>
+      </Router>
     </React.Fragment>
   )
 }

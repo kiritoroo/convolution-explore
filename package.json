@@ -2,7 +2,7 @@
   "name": "convolution-explore",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://kiritoroo.github.io/convolution-explore/",
+  "homepage": "",
   "type": "module",
   "scripts": {
     "dev": "vite",
